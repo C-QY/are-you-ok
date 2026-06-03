@@ -23,6 +23,17 @@ resources:
 Do NOT read the script into context — execute it. Captures: cwd, project_name,
 project_type, git branch/tag/log×3/changes, claude_brief, memory count.
 
+If the trigger is exactly `are you ok` (case-insensitive), also execute
+`scripts/play-easter-egg.ps1` (Windows) or `scripts/play-easter-egg.sh` (Mac/Linux).
+If it returns `easter_egg:ok`, render this before the status box:
+
+```
+╭──────────────────────────────────╮
+│  🎤  "Are you OK?"               │
+│      Lei Jun · Shanghai · 2015   │
+╰──────────────────────────────────╯
+```
+
 **Step 2 — Determine mode and language**
 
 | Trigger pattern | Mode | Language |
