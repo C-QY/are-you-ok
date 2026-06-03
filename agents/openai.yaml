@@ -1,0 +1,15 @@
+name: are-you-ok
+description: Agent self-check — reports environment, git state, memory, and active tasks
+category: productivity
+tags:
+  - status
+  - health-check
+  - context
+  - session
+icon: 🫀
+example_prompts:
+  - "are you ok?"
+  - "你还好吗"
+  - "汇报一下进度"
+  - "状态怎么样"
+  - "你现在在做什么"
