@@ -21,26 +21,26 @@
 ## 输出示例
 
 ```
-┌─ STATUS ──────────────────────── 2026-06-03 14:32 ──┐
+┌─ 状态检查 ──────────────────── 2026-06-03 14:32 ────┐
 │                                                      │
-│  agent    claude-sonnet-4-6                          │
-│  cwd      ~/projects/my-app                          │
-│  git      main · 2Δ · "feat: add user search"        │
-│  memory   4 entries                                  │
-│  tasks    ●2 active  ○1 pending  ✓3 done             │
-│  tools    Read Write Edit Glob Grep                  │
-│  jobs     none                                       │
+│  模型   claude-sonnet-4-6                            │
+│  目录   ~/projects/my-app                            │
+│  git    main · 2Δ · "feat: 新增用户搜索"              │
+│  记忆   4 条                                         │
+│  任务   ●2 进行中  ○1 待处理  ✓3 已完成               │
+│  工具   Read Write Edit Glob Grep                    │
+│  后台   无                                           │
 │                                                      │
-├─ ACTIVE ─────────────────────────────────────────────┤
-│  ●  implement pagination for the results list        │
-│  ●  write unit tests for the auth module             │
+├─ 进行中 ─────────────────────────────────────────────┤
+│  ●  实现结果列表的分页功能                              │
+│  ●  为认证模块编写单元测试                              │
 │                                                      │
-├─ PENDING ────────────────────────────────────────────┤
-│  ○  update API documentation                         │
+├─ 待处理 ─────────────────────────────────────────────┤
+│  ○  更新 API 文档                                    │
 │                                                      │
-├─ MEMORY ─────────────────────────────────────────────┤
-│  project-alpha     backend migration goals           │
-│  feedback-tests    prefer integration tests          │
+├─ 记忆列表 ───────────────────────────────────────────┤
+│  project-alpha   后端迁移目标与当前阶段                 │
+│  feedback-tests  偏好集成测试而非 mock                 │
 │                                                      │
 └──────────────────────────────────────────────────────┘
 ```

@@ -61,44 +61,71 @@ Collect from your own session state:
 - Allowed tools
 - Running background jobs
 
-**Step 3 — Render the status box**
+**Step 3 — Select output language**
 
-Draw the output using box-drawing characters as shown in the template below.
-Keep width ≤ 56 characters. Omit empty detail sections entirely.
+| Trigger | Output language |
+|---------|----------------|
+| Chinese phrase (`你还好吗`, `状态怎么样`, etc.) | Chinese |
+| English phrase (`status check`, `report status`, etc.) | English |
+| `are you ok` | **Chinese** (default) |
+| Agent call (`!status` / JSON) | English (unless caller specifies `"lang": "zh"`) |
 
+**Step 4 — Render the status box**
+
+Draw the output using box-drawing characters. Omit empty detail sections entirely.
+
+**English template:**
 ```
 ┌─ STATUS ──────────────────────── {YYYY-MM-DD HH:MM} ┐
 │                                                      │
 │  agent    {model name}                               │
 │  cwd      {working directory}                        │
 │  git      {branch} · {N}Δ · "{last commit msg}"     │
-│  memory   {N} entries  ·  {path-hint or "none"}      │
-│  tasks    ●{N} active  ○{N} pending  ✓{N} done       │
+│  memory   {N} entries                                │
+│  tasks    ●{N} active  ○{N} pending  ✓{N} done      │
 │  tools    {space-separated tool names}               │
 │  jobs     {N} running  /  none                       │
 │                                                      │
 ├─ ACTIVE ─────────────────────────────────────────────┤
 │  ●  {task description}                               │
-│                                                      │
 ├─ PENDING ────────────────────────────────────────────┤
 │  ○  {task description}                               │
-│                                                      │
 ├─ MEMORY ─────────────────────────────────────────────┤
-│  {slug:<16}  {one-line description}                  │
+│  {slug:<16}  {description}                           │
+└──────────────────────────────────────────────────────┘
+```
+
+**Chinese template:**
+```
+┌─ 状态检查 ──────────────────── {YYYY-MM-DD HH:MM} ──┐
 │                                                      │
+│  模型   {model name}                                 │
+│  目录   {working directory}                          │
+│  git    {branch} · {N}Δ · "{last commit msg}"        │
+│  记忆   {N} 条                                       │
+│  任务   ●{N} 进行中  ○{N} 待处理  ✓{N} 已完成        │
+│  工具   {space-separated tool names}                 │
+│  后台   {N} 个  /  无                                │
+│                                                      │
+├─ 进行中 ─────────────────────────────────────────────┤
+│  ●  {task description}                               │
+├─ 待处理 ─────────────────────────────────────────────┤
+│  ○  {task description}                               │
+├─ 记忆列表 ───────────────────────────────────────────┤
+│  {slug:<16}  {description}                           │
 └──────────────────────────────────────────────────────┘
 ```
 
 **Rendering rules:**
-- Omit `ACTIVE` block if no active tasks; omit `PENDING` block if no pending tasks
-- Omit `MEMORY` block if memory count is 0
+- Omit a detail block entirely if its section is empty
 - Cap active/pending task lists at 5 each; append `(+N more)` if exceeded
 - Cap memory entries at 10; append `(+N more)` if exceeded
-- Truncate any value line exceeding 50 chars with `…`
+- Truncate any value exceeding 50 chars with `…`
 - If called by another agent, replace the top border label:
-  `┌─ STATUS · called by {caller-id} ─── {datetime} ─┐`
-- `git` line: if not a repo, write `not a repo`
-- `memory` line: if not using Claude memory, write agent's own memory/context system name or `none`
+  EN: `┌─ STATUS · from {caller-id} ──── {datetime} ──┐`
+  CN: `┌─ 状态检查 · 来自 {caller-id} ── {datetime} ──┐`
+- `git` / `git` line: if not a repo → EN: `not a repo` / CN: `非代码仓库`
+- `memory` / `记忆` line: if no memory found → EN: `none` / CN: `无`
 - Do NOT expose secrets, tokens, or passwords
 - Do NOT add prose outside the box
 
@@ -114,6 +141,33 @@ Keep width ≤ 56 characters. Omit empty detail sections entirely.
 
 ## Example Output
 
+**Chinese** (triggered by `are you ok`, `你还好吗`, etc.):
+```
+┌─ 状态检查 ──────────────────── 2026-06-03 14:32 ────┐
+│                                                      │
+│  模型   claude-sonnet-4-6                            │
+│  目录   ~/projects/my-app                            │
+│  git    main · 2Δ · "feat: 新增用户搜索"              │
+│  记忆   4 条                                         │
+│  任务   ●2 进行中  ○1 待处理  ✓3 已完成               │
+│  工具   Read Write Edit Glob Grep                    │
+│  后台   无                                           │
+│                                                      │
+├─ 进行中 ─────────────────────────────────────────────┤
+│  ●  实现结果列表的分页功能                              │
+│  ●  为认证模块编写单元测试                              │
+│                                                      │
+├─ 待处理 ─────────────────────────────────────────────┤
+│  ○  更新 API 文档                                    │
+│                                                      │
+├─ 记忆列表 ───────────────────────────────────────────┤
+│  project-alpha   后端迁移目标与当前阶段                 │
+│  feedback-tests  偏好集成测试而非 mock                 │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+```
+
+**English** (triggered by `status check`, `report status`, etc.):
 ```
 ┌─ STATUS ──────────────────────── 2026-06-03 14:32 ──┐
 │                                                      │
