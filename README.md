@@ -99,19 +99,52 @@ chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
 
 ---
 
-## 彩蛋
+## 彩蛋（可选）
 
-触发词恰好是 `are you ok`（大小写不限）时，会播放雷军名梗音频（如果你放了的话）：
+触发词恰好是 `are you ok`（大小写不限）时触发，其他状态词不触发。
 
+**效果：**
 ```
 ╭──────────────────────────────────╮
 │  🎤  "Are you OK?"               │
 │      Lei Jun · Shanghai · 2015   │
 ╰──────────────────────────────────╯
 ```
+彩蛋结束后，状态框正常输出。
 
-将 `leijun.mp3` 放入 `assets/` 文件夹即可启用（B站搜"雷军 are you ok"，剪 3 秒）。
-没有文件时自动降级为文字版，不影响正常使用。
+---
+
+### 启用 GIF
+
+将 `leijun.gif` 放入 `assets/` 文件夹，触发时用系统默认程序弹出。
+
+### 启用音频
+
+将 `leijun.mp3`（或 `leijun.wav`）放入 `assets/` 文件夹，触发时自动播放。
+
+> B 站搜「雷军 are you ok」，截取约 3 秒片段，保存为 `leijun.mp3` 即可。
+
+支持的文件（放任意一个或全部）：
+
+| 文件 | 效果 |
+|------|------|
+| `assets/leijun.gif` | 弹出 GIF 图 |
+| `assets/leijun.mp3` | 播放音频 |
+| `assets/leijun.wav` | 播放音频（备选格式） |
+
+没有任何文件时，自动降级为纯文字版彩蛋，不影响正常使用。
+
+---
+
+### 关闭彩蛋
+
+删除 `assets/` 下的媒体文件即可关闭对应效果。
+
+如需完全禁用彩蛋逻辑，删除以下两个文件：
+```
+scripts/play-easter-egg.ps1
+scripts/play-easter-egg.sh
+```
 
 ---
 

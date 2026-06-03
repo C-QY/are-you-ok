@@ -89,6 +89,53 @@ chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
 
 ---
 
+## Easter Egg (Optional)
+
+Triggers only when the exact phrase `are you ok` is used (case-insensitive). Other trigger phrases do not activate it.
+
+**Effect:**
+```
+╭──────────────────────────────────╮
+│  🎤  "Are you OK?"               │
+│      Lei Jun · Shanghai · 2015   │
+╰──────────────────────────────────╯
+```
+The status box renders normally after the Easter egg.
+
+---
+
+### Enable GIF
+
+Place `leijun.gif` in the `assets/` folder. It opens in your default viewer on trigger.
+
+### Enable Audio
+
+Place `leijun.mp3` (or `leijun.wav`) in the `assets/` folder. It plays automatically on trigger.
+
+Supported files (use any or all):
+
+| File | Effect |
+|------|--------|
+| `assets/leijun.gif` | Opens GIF in default viewer |
+| `assets/leijun.mp3` | Plays audio |
+| `assets/leijun.wav` | Plays audio (fallback format) |
+
+If no media files are present, a text-only Easter egg is shown — the skill works normally either way.
+
+---
+
+### Disable the Easter Egg
+
+Remove the media files from `assets/` to disable the corresponding effects.
+
+To completely disable the Easter egg logic, delete:
+```
+scripts/play-easter-egg.ps1
+scripts/play-easter-egg.sh
+```
+
+---
+
 ## Requirements
 
 | Platform | Requirement |
