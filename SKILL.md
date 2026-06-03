@@ -5,10 +5,11 @@ description: >
   memory, active tasks, allowed tools, and background jobs.
   Trigger when user asks: "are you ok", "你还好吗", "状态怎么样", "汇报进度",
   "你现在在做什么", "当前状态", or any request for a session or context summary.
-version: 2.0.0
-allowed_tools: [PowerShell, Read, Glob]
+version: 2.1.0
+allowed_tools: [PowerShell, Bash, Read, Glob]
 resources:
   - scripts/status-check.ps1
+  - scripts/status-check.sh
 tags: [status, agent, context, session, health-check]
 ---
 
@@ -16,19 +17,29 @@ tags: [status, agent, context, session, health-check]
 
 ## Prerequisites
 
-- PowerShell 5.1+ — required for `scripts/status-check.ps1`
-- `git` — optional; git section omitted gracefully if absent
-- Script must be placed at `scripts/status-check.ps1` relative to this file
+**Windows**
+- PowerShell 5.1+
+- `git` optional
+
+**Mac / Linux**
+- bash
+- `git` optional
+- Run once after install: `chmod +x scripts/status-check.sh`
+
+Script must be placed at `scripts/status-check.ps1` (Windows) or
+`scripts/status-check.sh` (Mac/Linux) relative to this skill file.
 
 ## Workflow
 
 **Step 1 — Run the data collection script**
 
-```powershell
-& "<skill-dir>\scripts\status-check.ps1"
-```
+Detect the current platform and run the matching script:
 
-Capture full output. Do NOT read the script into context — execute it.
+- **Windows** → execute `scripts/status-check.ps1` via PowerShell
+- **Mac/Linux** → execute `scripts/status-check.sh` via Bash
+
+Both scripts output identical `key:value` lines. Capture the full output.
+Do NOT read the script file into context — execute it.
 
 **Step 2 — Gather agent-side context**
 
@@ -85,10 +96,11 @@ recent changes
 
 | Symptom | Fix |
 |---------|-----|
-| Script not found | Ensure `scripts/status-check.ps1` is alongside `SKILL.md` |
-| git line missing | Not a git repo — write "not a repo" |
+| Script not found | Ensure the `scripts/` folder is alongside `SKILL.md` |
+| git fields missing | Not a git repo — write "not a repo" in git line |
 | memory shows "none" | No MEMORY.md exists yet — expected for new sessions |
-| Execution policy error | `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` |
+| Windows: execution policy error | `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` |
+| Mac/Linux: permission denied | `chmod +x scripts/status-check.sh` |
 
 ## Example Output
 
@@ -100,7 +112,7 @@ cwd       ~/projects/my-app
 git       main · 2 uncommitted · last: "feat: add user search"
 memory    4 entries
 tasks     2 active, 1 pending, 3 done
-tools     Bash Read Write Edit Glob Grep
+tools     Read Write Edit Glob Grep
 jobs      none
 
 tasks (active)

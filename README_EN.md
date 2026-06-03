@@ -28,7 +28,7 @@ cwd       ~/projects/my-app
 git       main · 2 uncommitted · last: "feat: add user search"
 memory    4 entries
 tasks     2 active, 1 pending, 3 done
-tools     Bash Read Write Edit Glob Grep
+tools     Read Write Edit Glob Grep
 jobs      none
 
 tasks (active)
@@ -41,7 +41,6 @@ tasks (pending)
 memory
   project-alpha    backend migration goals and current phase
   feedback-tests   prefer integration tests over mocked unit tests
-  ...
 
 recent changes
   src/components/SearchBar.tsx
@@ -61,20 +60,30 @@ are you ok
 
 ## Installation
 
-Copy both files into your Claude Code skills directory:
+Copy the following files into your Claude Code skills directory:
 
 ```
 ~/.claude/skills/are-you-ok/
   SKILL.md
-  scripts/status-check.ps1
+  scripts/
+    status-check.ps1   ← Windows
+    status-check.sh    ← Mac / Linux
 ```
 
 Or place them inside your project's `.claude/` folder.
 
+**Mac / Linux — one extra step:**
+```bash
+chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
+```
+
 ## Requirements
 
-- PowerShell 5.1+ (Windows)
-- `git` optional — git fields are skipped gracefully if absent
+| Platform | Requirement |
+|----------|-------------|
+| Windows | PowerShell 5.1+ |
+| Mac / Linux | bash |
+| All platforms | `git` (optional — skipped gracefully if absent) |
 
 ## Architecture
 
@@ -82,6 +91,6 @@ Or place them inside your project's `.claude/` folder.
 |-------|------|---------|
 | L1 | `SKILL.md` frontmatter | Trigger matching, ~100 tokens |
 | L2 | `SKILL.md` body | Rendering instructions, loaded on trigger |
-| L3 | `scripts/status-check.ps1` | Deterministic data collection, zero context cost |
+| L3 | `scripts/status-check.*` | Deterministic data collection, zero context cost |
 
-The script collects workspace metadata only (directory, git state, memory entry count). It never reads or outputs actual memory content — that is handled by the agent directly.
+The scripts collect workspace metadata only (directory, git state, memory entry count). They never read or output actual memory content — that is handled by the agent directly.

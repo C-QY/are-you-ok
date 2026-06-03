@@ -28,7 +28,7 @@ cwd       ~/projects/my-app
 git       main · 2 uncommitted · last: "feat: add user search"
 memory    4 entries
 tasks     2 active, 1 pending, 3 done
-tools     Bash Read Write Edit Glob Grep
+tools     Read Write Edit Glob Grep
 jobs      none
 
 tasks (active)
@@ -41,7 +41,6 @@ tasks (pending)
 memory
   project-alpha    后端迁移目标与当前阶段
   feedback-tests   偏好集成测试而非 mock 单元测试
-  ...
 
 recent changes
   src/components/SearchBar.tsx
@@ -61,20 +60,30 @@ are you ok
 
 ## 安装方式
 
-将以下两个文件复制到你的 Claude Code skills 目录：
+将以下文件复制到你的 Claude Code skills 目录：
 
 ```
 ~/.claude/skills/are-you-ok/
   SKILL.md
-  scripts/status-check.ps1
+  scripts/
+    status-check.ps1   ← Windows
+    status-check.sh    ← Mac / Linux
 ```
 
 或放入项目的 `.claude/` 文件夹中。
 
+**Mac / Linux 额外步骤：**
+```bash
+chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
+```
+
 ## 适用环境
 
-- PowerShell 5.1+（Windows）
-- `git` 可选，不存在时跳过 git 相关字段
+| 平台 | 要求 |
+|------|------|
+| Windows | PowerShell 5.1+ |
+| Mac / Linux | bash |
+| 全平台 | `git`（可选，无则跳过 git 字段） |
 
 ## 设计结构
 
@@ -82,6 +91,6 @@ are you ok
 |------|------|------|
 | L1 | `SKILL.md` frontmatter | 触发判断，约 100 tokens |
 | L2 | `SKILL.md` 正文 | 渲染指令，触发后加载 |
-| L3 | `scripts/status-check.ps1` | 确定性数据采集，不占用上下文 |
+| L3 | `scripts/status-check.*` | 确定性数据采集，不占用上下文 |
 
-脚本只采集工作区元数据（目录、git、memory 条目数），不读取也不输出任何实际内容。Memory 的具体内容由 agent 自行读取并决定展示方式。
+脚本只采集工作区元数据（目录、git 状态、memory 条目数），不读取任何实际内容。Memory 的具体条目由 agent 自行读取后展示。
