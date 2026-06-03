@@ -1,66 +1,72 @@
 # are-you-ok
 
-> 一个让 Claude Code agent 汇报自身当前状态的 Skill。
+> 一个面向任意 AI agent 的快速、轻量状态汇报 Skill。
 
 **[English version →](README_EN.md)**
 
 ---
 
-## 这个 Skill 做什么
+## 定位
 
-调用后，agent 会打印一份结构化的状态快照，涵盖：
+`are-you-ok` 是一个高频、快速、通用的状态检查 Skill，设计目标：
 
-- **agent** — 当前使用的模型
-- **cwd** — 工作目录
-- **git** — 分支、未提交数量、最后一条 commit
-- **memory** — 持久化记忆条目数量
-- **tasks** — 进行中 / 待办 / 已完成的任务数量
-- **tools** — 当前 session 允许使用的工具
-- **jobs** — 后台运行中的任务
+- **人类用户** 随时查看 agent 正在做什么
+- **监管 agent** 批量轮询子 agent 的运行状态
+- **任意 AI 模型** 在交接上下文前快速输出当前状态
 
-输出示例：
+不绑定 Claude Code——任何支持 SKILL.md 格式的 agent 都可以使用。
+
+---
+
+## 输出示例
 
 ```
-are you ok? · 2026-06-03 14:32
-
-agent     claude-sonnet-4-6
-cwd       ~/projects/my-app
-git       main · 2 uncommitted · last: "feat: add user search"
-memory    4 entries
-tasks     2 active, 1 pending, 3 done
-tools     Read Write Edit Glob Grep
-jobs      none
-
-tasks (active)
-  · implement pagination for the results list
-  · write unit tests for the auth module
-
-tasks (pending)
-  · update API documentation
-
-memory
-  project-alpha    后端迁移目标与当前阶段
-  feedback-tests   偏好集成测试而非 mock 单元测试
-
-recent changes
-  src/components/SearchBar.tsx
-  src/api/users.ts
+┌─ STATUS ──────────────────────── 2026-06-03 14:32 ──┐
+│                                                      │
+│  agent    claude-sonnet-4-6                          │
+│  cwd      ~/projects/my-app                          │
+│  git      main · 2Δ · "feat: add user search"        │
+│  memory   4 entries                                  │
+│  tasks    ●2 active  ○1 pending  ✓3 done             │
+│  tools    Read Write Edit Glob Grep                  │
+│  jobs     none                                       │
+│                                                      │
+├─ ACTIVE ─────────────────────────────────────────────┤
+│  ●  implement pagination for the results list        │
+│  ●  write unit tests for the auth module             │
+│                                                      │
+├─ PENDING ────────────────────────────────────────────┤
+│  ○  update API documentation                         │
+│                                                      │
+├─ MEMORY ─────────────────────────────────────────────┤
+│  project-alpha     backend migration goals           │
+│  feedback-tests    prefer integration tests          │
+│                                                      │
+└──────────────────────────────────────────────────────┘
 ```
+
+---
 
 ## 触发方式
 
+### 人类触发
 ```
-are you ok
-你还好吗
-状态怎么样
-汇报进度
-当前状态
-你现在在做什么
+are you ok  ·  你还好吗  ·  状态怎么样  ·  汇报进度  ·  当前状态
 ```
 
-## 安装方式
+### Agent 触发（机器对机器）
+监管 agent 或编排器在消息中包含：
+```
+!status
+```
+或结构化调用：
+```json
+{"skill": "are-you-ok", "caller": "<agent-id>"}
+```
 
-将以下文件复制到你的 Claude Code skills 目录：
+---
+
+## 安装
 
 ```
 ~/.claude/skills/are-you-ok/
@@ -70,12 +76,12 @@ are you ok
     status-check.sh    ← Mac / Linux
 ```
 
-或放入项目的 `.claude/` 文件夹中。
-
 **Mac / Linux 额外步骤：**
 ```bash
 chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
 ```
+
+---
 
 ## 适用环境
 
@@ -83,14 +89,14 @@ chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
 |------|------|
 | Windows | PowerShell 5.1+ |
 | Mac / Linux | bash |
-| 全平台 | `git`（可选，无则跳过 git 字段） |
+| 全平台 | `git` 可选 |
+
+---
 
 ## 设计结构
 
-| 层级 | 文件 | 说明 |
-|------|------|------|
-| L1 | `SKILL.md` frontmatter | 触发判断，约 100 tokens |
-| L2 | `SKILL.md` 正文 | 渲染指令，触发后加载 |
-| L3 | `scripts/status-check.*` | 确定性数据采集，不占用上下文 |
-
-脚本只采集工作区元数据（目录、git 状态、memory 条目数），不读取任何实际内容。Memory 的具体条目由 agent 自行读取后展示。
+| 层级 | 文件 | token 成本 |
+|------|------|-----------|
+| L1 | `SKILL.md` frontmatter | ~100 tokens（始终加载） |
+| L2 | `SKILL.md` 正文 | 触发后加载 |
+| L3 | `scripts/status-check.*` | 执行不读取，零 token 成本 |

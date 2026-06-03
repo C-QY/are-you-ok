@@ -26,7 +26,7 @@ else
 fi
 
 # MEMORY — count only, content is for the agent to read directly
-mem_file=$(find "$HOME/.claude/projects" -name "MEMORY.md" 2>/dev/null | head -1)
+mem_file=$(find "$HOME/.claude/projects" -maxdepth 6 -name "MEMORY.md" 2>/dev/null | head -1)
 if [ -n "$mem_file" ]; then
   count=$(grep -c "^- \[" "$mem_file" 2>/dev/null || echo 0)
   echo "memory_path:$mem_file"
