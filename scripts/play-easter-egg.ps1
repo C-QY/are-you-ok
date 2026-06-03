@@ -5,13 +5,6 @@
 $assetsDir = Join-Path $PSScriptRoot "..\assets"
 $mp3 = Join-Path $assetsDir "eleijun-are-you-ok.mp3"
 $wav = Join-Path $assetsDir "eleijun-are-you-ok.wav"
-$gif = Join-Path $assetsDir "eleijun-are-you-ok.gif"
-
-# Open GIF in default viewer (non-blocking)
-if (Test-Path $gif) {
-    Start-Process $gif
-}
-
 # Play audio
 $played = $false
 

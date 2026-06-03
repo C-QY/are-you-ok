@@ -124,11 +124,10 @@ chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
 
 > B 站搜「雷军 are you ok」，截取约 3 秒片段，保存为 `eleijun-are-you-ok.mp3` 即可。
 
-支持的文件（放任意一个或全部）：
+支持的文件：
 
 | 文件 | 效果 |
 |------|------|
-| `assets/eleijun-are-you-ok.gif` | 弹出 GIF 图 |
 | `assets/eleijun-are-you-ok.mp3` | 播放音频 |
 | `assets/eleijun-are-you-ok.wav` | 播放音频（备选格式） |
 

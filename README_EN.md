@@ -112,11 +112,10 @@ Place `eleijun-are-you-ok.gif` in the `assets/` folder. It opens in your default
 
 Place `eleijun-are-you-ok.mp3` (or `eleijun-are-you-ok.wav`) in the `assets/` folder. It plays automatically on trigger.
 
-Supported files (use any or all):
+Supported files:
 
 | File | Effect |
 |------|--------|
-| `assets/eleijun-are-you-ok.gif` | Opens GIF in default viewer |
 | `assets/eleijun-are-you-ok.mp3` | Plays audio |
 | `assets/eleijun-are-you-ok.wav` | Plays audio (fallback format) |
 
