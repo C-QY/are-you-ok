@@ -89,9 +89,9 @@ chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
 
 ---
 
-## Easter Egg (Optional)
+## Easter Egg
 
-Triggers only when the exact phrase `are you ok` is used (case-insensitive). Other trigger phrases do not activate it.
+Triggers only when the exact phrase `are you ok` is used (case-insensitive). Other trigger phrases do not activate it. Enabled by default.
 
 **Effect:**
 ```

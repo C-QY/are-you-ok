@@ -99,9 +99,9 @@ chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
 
 ---
 
-## 彩蛋（可选）
+## 彩蛋
 
-触发词恰好是 `are you ok`（大小写不限）时触发，其他状态词不触发。
+触发词恰好是 `are you ok`（大小写不限）时触发，其他状态词不触发。默认开启。
 
 **效果：**
 ```
