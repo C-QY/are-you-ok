@@ -1,25 +1,25 @@
 # are-you-ok
 
-> A fast, lightweight status report skill for any AI agent.
+> A lightweight skill for users and supervisor agents to instantly check any AI agent's current state or an active project's progress.
 
 **[中文版本 →](README.md)**
 
 ---
 
-## Purpose
+## Two Modes
 
-`are-you-ok` is a high-frequency, fast, universal status check skill designed for:
+| Mode | Focus | Triggers |
+|------|-------|---------|
+| **Agent Status** | Model, tools, tasks, memory | `are you ok` · `status check` · `report status` |
+| **Project Status** | Name, version, commits, changes | `project status` · `project progress` · `show project` |
 
-- **Humans** checking what an agent is currently doing
-- **Supervisor agents** polling the state of sub-agents
-- **Any AI model** reporting its state before a context handoff
-
-Not tied to Claude Code — any agent supporting the SKILL.md format can use it.
+Agent call: `!status` or `{"skill":"are-you-ok","mode":"agent|project"}`
 
 ---
 
 ## Sample Output
 
+**Agent mode** (`status check`):
 ```
 ┌─ STATUS ──────────────────────── 2026-06-03 14:32 ──┐
 │                                                      │
@@ -34,41 +34,40 @@ Not tied to Claude Code — any agent supporting the SKILL.md format can use it.
 ├─ ACTIVE ─────────────────────────────────────────────┤
 │  ●  implement pagination for the results list        │
 │  ●  write unit tests for the auth module             │
-│                                                      │
 ├─ PENDING ────────────────────────────────────────────┤
 │  ○  update API documentation                         │
-│                                                      │
 ├─ MEMORY ─────────────────────────────────────────────┤
-│  project-alpha     backend migration goals           │
-│  feedback-tests    prefer integration tests          │
-│                                                      │
+│  project-alpha   backend migration goals             │
 └──────────────────────────────────────────────────────┘
 ```
 
----
-
-## Trigger Phrases
-
-### Human (English & Chinese — both work equally)
-
-| English | Chinese |
-|---------|---------|
-| are you ok | 你还好吗 |
-| status check | 状态怎么样 |
-| what are you doing | 你现在在做什么 |
-| report status | 汇报进度 |
-| give me a status update | 汇报一下进度 |
-| how's it going | 更新一下状态 |
-| what's your progress | 进度怎么样 |
-| current status | 当前状态 |
-
-### Agent-to-agent (programmatic)
+**Project mode** (`project status`):
 ```
-!status
-```
-or structured:
-```json
-{"skill": "are-you-ok", "caller": "<agent-id>"}
+┌─ PROJECT STATUS ────────────── 2026-06-03 14:32 ────┐
+│                                                      │
+│  project  my-app  [Node.js]                          │
+│  version  v1.2.0                                     │
+│  cwd      ~/projects/my-app                          │
+│  git      main · 3Δ · "feat: add user search"        │
+│  memory   4 entries                                  │
+│  tasks    ●2 active  ○3 pending  ✓8 done             │
+│  agent    claude-sonnet-4-6                          │
+│                                                      │
+├─ PROJECT BRIEF ──────────────────────────────────────┤
+│  Full-stack Node.js app, RESTful API + React frontend│
+├─ RECENT COMMITS ─────────────────────────────────────┤
+│  a1b2c3d  feat: add user search                      │
+│  e4f5g6h  fix: login redirect issue                  │
+│  i7j8k9l  chore: upgrade dependencies                │
+├─ ACTIVE ─────────────────────────────────────────────┤
+│  ●  implement pagination for the results list        │
+├─ PENDING ────────────────────────────────────────────┤
+│  ○  update API documentation                         │
+├─ RECENT CHANGES ─────────────────────────────────────┤
+│  src/components/SearchBar.tsx                        │
+├─ MEMORY ─────────────────────────────────────────────┤
+│  project-alpha   backend migration goals             │
+└──────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -100,10 +99,12 @@ chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
 
 ---
 
-## Architecture
+## Design Principles
+
+**Fast · Lightweight · Universal** — scripts collect metadata only, never actual content. Before any change: does this add extra overhead? If yes, skip it.
 
 | Layer | File | Token cost |
 |-------|------|-----------|
-| L1 | `SKILL.md` frontmatter | ~100 tokens (always loaded) |
+| L1 | `SKILL.md` frontmatter | ~100 tokens |
 | L2 | `SKILL.md` body | Loaded on trigger |
 | L3 | `scripts/status-check.*` | Executed, not read — zero token cost |
