@@ -116,21 +116,21 @@ chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
 
 ### 启用 GIF
 
-将 `leijun.gif` 放入 `assets/` 文件夹，触发时用系统默认程序弹出。
+将 `eleijun-are-you-ok.gif` 放入 `assets/` 文件夹，触发时用系统默认程序弹出。
 
 ### 启用音频
 
-将 `leijun.mp3`（或 `leijun.wav`）放入 `assets/` 文件夹，触发时自动播放。
+将 `eleijun-are-you-ok.mp3`（或 `eleijun-are-you-ok.wav`）放入 `assets/` 文件夹，触发时自动播放。
 
-> B 站搜「雷军 are you ok」，截取约 3 秒片段，保存为 `leijun.mp3` 即可。
+> B 站搜「雷军 are you ok」，截取约 3 秒片段，保存为 `eleijun-are-you-ok.mp3` 即可。
 
 支持的文件（放任意一个或全部）：
 
 | 文件 | 效果 |
 |------|------|
-| `assets/leijun.gif` | 弹出 GIF 图 |
-| `assets/leijun.mp3` | 播放音频 |
-| `assets/leijun.wav` | 播放音频（备选格式） |
+| `assets/eleijun-are-you-ok.gif` | 弹出 GIF 图 |
+| `assets/eleijun-are-you-ok.mp3` | 播放音频 |
+| `assets/eleijun-are-you-ok.wav` | 播放音频（备选格式） |
 
 没有任何文件时，自动降级为纯文字版彩蛋，不影响正常使用。
 

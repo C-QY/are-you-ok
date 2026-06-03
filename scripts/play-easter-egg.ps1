@@ -1,11 +1,11 @@
 # play-easter-egg.ps1
 # Triggered only by the exact phrase "are you ok".
-# Plays assets/leijun.mp3 (or .wav) if present; falls back to text.
+# Plays assets/eleijun-are-you-ok.mp3 (or .wav) if present; falls back to text.
 
 $assetsDir = Join-Path $PSScriptRoot "..\assets"
-$mp3 = Join-Path $assetsDir "leijun.mp3"
-$wav = Join-Path $assetsDir "leijun.wav"
-$gif = Join-Path $assetsDir "leijun.gif"
+$mp3 = Join-Path $assetsDir "eleijun-are-you-ok.mp3"
+$wav = Join-Path $assetsDir "eleijun-are-you-ok.wav"
+$gif = Join-Path $assetsDir "eleijun-are-you-ok.gif"
 
 # Open GIF in default viewer (non-blocking)
 if (Test-Path $gif) {

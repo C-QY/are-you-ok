@@ -106,19 +106,19 @@ The status box renders normally after the Easter egg.
 
 ### Enable GIF
 
-Place `leijun.gif` in the `assets/` folder. It opens in your default viewer on trigger.
+Place `eleijun-are-you-ok.gif` in the `assets/` folder. It opens in your default viewer on trigger.
 
 ### Enable Audio
 
-Place `leijun.mp3` (or `leijun.wav`) in the `assets/` folder. It plays automatically on trigger.
+Place `eleijun-are-you-ok.mp3` (or `eleijun-are-you-ok.wav`) in the `assets/` folder. It plays automatically on trigger.
 
 Supported files (use any or all):
 
 | File | Effect |
 |------|--------|
-| `assets/leijun.gif` | Opens GIF in default viewer |
-| `assets/leijun.mp3` | Plays audio |
-| `assets/leijun.wav` | Plays audio (fallback format) |
+| `assets/eleijun-are-you-ok.gif` | Opens GIF in default viewer |
+| `assets/eleijun-are-you-ok.mp3` | Plays audio |
+| `assets/eleijun-are-you-ok.wav` | Plays audio (fallback format) |
 
 If no media files are present, a text-only Easter egg is shown — the skill works normally either way.
 

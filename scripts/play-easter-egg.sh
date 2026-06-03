@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # play-easter-egg.sh
 # Triggered only by the exact phrase "are you ok".
-# Plays assets/leijun.mp3 if present; falls back to text.
+# Plays assets/eleijun-are-you-ok.mp3 if present; falls back to text.
 
 assets_dir="$(dirname "$0")/../assets"
-mp3="$assets_dir/leijun.mp3"
-gif="$assets_dir/leijun.gif"
+mp3="$assets_dir/eleijun-are-you-ok.mp3"
+gif="$assets_dir/eleijun-are-you-ok.gif"
 played=false
 
 # Open GIF in default viewer (non-blocking)
