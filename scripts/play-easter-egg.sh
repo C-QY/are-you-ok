@@ -5,7 +5,17 @@
 
 assets_dir="$(dirname "$0")/../assets"
 mp3="$assets_dir/leijun.mp3"
+gif="$assets_dir/leijun.gif"
 played=false
+
+# Open GIF in default viewer (non-blocking)
+if [ -f "$gif" ]; then
+  if command -v open &>/dev/null; then
+    open "$gif" &      # Mac
+  elif command -v xdg-open &>/dev/null; then
+    xdg-open "$gif" &  # Linux
+  fi
+fi
 
 if [ -f "$mp3" ]; then
   if command -v afplay &>/dev/null; then
