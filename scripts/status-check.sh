@@ -1,20 +1,45 @@
-﻿#!/usr/bin/env bash
+#!/usr/bin/env bash
 # status-check.sh - Layer 3 data collector for the are-you-ok skill (Mac/Linux)
-# Usage: status-check.sh [--easter-egg]
+# Usage: status-check.sh [--ok-audio] [--network-check]
 
-# EASTER EGG - play audio first so it starts while data is collected
-if [ "$1" = "--easter-egg" ]; then
-  mp3="$(dirname "$0")/../assets/eleijun-are-you-ok.mp3"
-  if [ -f "$mp3" ]; then
-    if command -v afplay &>/dev/null;   then afplay "$mp3" &
-    elif command -v mpg123 &>/dev/null; then mpg123 -q "$mp3" &
-    elif command -v ffplay &>/dev/null; then ffplay -nodisp -autoexit -loglevel quiet "$mp3" &
-    else echo "easter_egg:ok"
+# NETWORK CHECK - quick DNS probe, runs before data collection
+for arg in "$@"; do
+  if [ "$arg" = "--network-check" ]; then
+    if nslookup api.anthropic.com > /dev/null 2>&1; then
+      echo "network_status:ok"
+    else
+      echo "network_status:fail"
     fi
-  else
-    echo "easter_egg:ok"
+    break
   fi
-fi
+done
+
+# OK AUDIO - play audio first so it starts while data is collected
+for arg in "$@"; do
+  if [ "$arg" = "--ok-audio" ]; then
+    assets_dir="$(dirname "$0")/../assets"
+    mp3="$assets_dir/eleijun-are-you-ok.mp3"
+    if [ -f "$assets_dir/.no-audio" ]; then
+      : # audio disabled by user
+    elif [ -f "$mp3" ]; then
+      if command -v afplay &>/dev/null; then
+        afplay "$mp3" &
+        echo "ok_audio:playing"
+      elif command -v mpg123 &>/dev/null; then
+        mpg123 -q "$mp3" &
+        echo "ok_audio:playing"
+      elif command -v ffplay &>/dev/null; then
+        ffplay -nodisp -autoexit -loglevel quiet "$mp3" &
+        echo "ok_audio:playing"
+      else
+        echo "ok_audio:not_found"
+      fi
+    else
+      echo "ok_audio:not_found"
+    fi
+    break
+  fi
+done
 
 echo "timestamp:$(date '+%Y-%m-%d %H:%M')"
 
@@ -71,7 +96,13 @@ if [ -f "$cwd/CLAUDE.md" ]; then
 fi
 
 # MEMORY - count only; omit entirely when not found (agent skips the memory line)
-mem_file=$(find "$HOME/.claude" -maxdepth 6 -name "MEMORY.md" 2>/dev/null | head -1)
+encoded=$(pwd | sed 's/://g' | sed 's|[/\\]|-|g')
+project_mem="$HOME/.claude/projects/$encoded/memory/MEMORY.md"
+if [ -f "$project_mem" ]; then
+  mem_file="$project_mem"
+else
+  mem_file=$(find "$HOME/.claude" -maxdepth 6 -name "MEMORY.md" 2>/dev/null | head -1)
+fi
 if [ -n "$mem_file" ]; then
   count=$(grep -c "^- \[" "$mem_file" 2>/dev/null || echo 0)
   echo "memory_path:$mem_file"

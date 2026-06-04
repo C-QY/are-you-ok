@@ -157,14 +157,15 @@ Agent 程序化调用：`!status` 或 `{"skill":"are-you-ok","mode":"agent|proje
 | 平台 | 要求 |
 |------|------|
 | Windows | PowerShell 5.1+ |
-| Mac / Linux | bash |
+| Mac | bash · afplay（系统自带） |
+| Linux | bash · mpg123 或 ffplay（音频可选） |
 | 全平台 | `git` 可选 |
 
 ---
 
-## 彩蛋
+## OK 音频
 
-触发词恰好是 `are you ok`（大小写不限）时触发，其他状态词不触发。默认开启，彩蛋结束后状态框正常输出。
+触发词恰好是 `are you ok`（大小写不限）时触发，其他状态词不触发。状态框在音频启动后立即输出，互不阻塞。
 
 ```
 ╭──────────────────────────────────╮
@@ -172,18 +173,23 @@ Agent 程序化调用：`!status` 或 `{"skill":"are-you-ok","mode":"agent|proje
 │      Lei Jun · Shanghai · 2015   │
 ╰──────────────────────────────────╯
 ```
+> 没有音频文件时自动降级为纯文字版，不影响正常使用。
 
-**启用音频彩蛋：** 将 `eleijun-are-you-ok.mp3`（或 `.wav`）放入 `assets/` 文件夹，触发时自动播放。
+**启用音频：** 将 `eleijun-are-you-ok.mp3`（或 `.wav`）放入 `assets/` 文件夹，触发时自动播放。
 > B 站搜「雷军 are you ok」，截取约 3 秒片段保存即可。
 
 | 文件 | 效果 |
 |------|------|
-| `assets/eleijun-are-you-ok.mp3` | 播放音频 |
+| `assets/eleijun-are-you-ok.mp3` | 播放音频（优先） |
 | `assets/eleijun-are-you-ok.wav` | 播放音频（备选格式） |
 
-没有媒体文件时自动降级为纯文字版彩蛋，不影响正常使用。
+**关闭音频：** 在 `assets/` 目录下创建空文件 `.no-audio`，触发时静默跳过，不影响状态框输出。
 
-**完全关闭彩蛋：** 删除 `scripts/play-easter-egg.ps1` 和 `scripts/play-easter-egg.sh`。
+```bash
+touch ~/.claude/skills/are-you-ok/assets/.no-audio
+```
+
+**完全移除 OK 音频功能：** 删除 `scripts/play-ok-audio.ps1` 和 `scripts/play-ok-audio.sh`。
 
 ---
 

@@ -1,6 +1,6 @@
 ﻿# status-check.ps1 - Layer 3 data collector for the are-you-ok skill (Windows)
-# Usage: status-check.ps1 [-EasterEgg]
-param([switch]$EasterEgg, [switch]$NetworkCheck)
+# Usage: status-check.ps1 [-OkAudio]
+param([switch]$OkAudio, [switch]$NetworkCheck)
 
 # NETWORK CHECK - quick DNS probe, runs before data collection
 if ($NetworkCheck) {
@@ -12,20 +12,25 @@ if ($NetworkCheck) {
     }
 }
 
-# EASTER EGG - play audio first so it starts while data is collected
-if ($EasterEgg) {
+# OK AUDIO - play audio first so it starts while data is collected
+if ($OkAudio) {
+    $noAudio = Join-Path $PSScriptRoot "..\assets\.no-audio"
     $mp3 = Join-Path $PSScriptRoot "..\assets\eleijun-are-you-ok.mp3"
     $wav = Join-Path $PSScriptRoot "..\assets\eleijun-are-you-ok.wav"
-    if (Test-Path $mp3) {
+    if (Test-Path $noAudio) {
+        # audio disabled by user
+    } elseif (Test-Path $mp3) {
         $fullPath = (Resolve-Path $mp3).Path
         Start-Process powershell -WindowStyle Hidden -ArgumentList '-NoProfile', '-Command',
             "Add-Type -AssemblyName PresentationCore; `$p = New-Object System.Windows.Media.MediaPlayer; `$p.Open([uri]::new('$fullPath')); `$p.Play(); Start-Sleep 15"
+        Write-Output 'ok_audio:playing'
     } elseif (Test-Path $wav) {
         $fullPath = (Resolve-Path $wav).Path
         Start-Process powershell -WindowStyle Hidden -ArgumentList '-NoProfile', '-Command',
             "Add-Type -AssemblyName System.Windows.Forms; (New-Object System.Media.SoundPlayer '$fullPath').PlaySync()"
+        Write-Output 'ok_audio:playing'
     } else {
-        Write-Output 'easter_egg:ok'
+        Write-Output 'ok_audio:not_found'
     }
 }
 
@@ -103,10 +108,16 @@ if (Test-Path $claudeMd) {
 # MEMORY - count only; omit entirely when not found (agent skips the memory line)
 $claudeRoot = Join-Path $env:USERPROFILE ".claude"
 if (Test-Path $claudeRoot) {
-    $memFile = Get-ChildItem -Path $claudeRoot -Recurse -Depth 6 -Filter "MEMORY.md" -ErrorAction SilentlyContinue | Select-Object -First 1
-    if ($memFile) {
-        $entryCount = (Select-String -Path $memFile.FullName -Pattern "^- \[").Count
-        Write-Output "memory_path:$($memFile.FullName)"
+    $encoded = $cwd -replace ':', '-' -replace '[/\\]', '-'
+    $projectMem = Join-Path $claudeRoot "projects\$encoded\memory\MEMORY.md"
+    $memPath = if (Test-Path $projectMem) {
+        $projectMem
+    } else {
+        (Get-ChildItem -Path $claudeRoot -Recurse -Depth 6 -Filter "MEMORY.md" -ErrorAction SilentlyContinue | Select-Object -First 1).FullName
+    }
+    if ($memPath) {
+        $entryCount = (Select-String -Path $memPath -Pattern "^- \[").Count
+        Write-Output "memory_path:$memPath"
         Write-Output "memory_count:$entryCount"
     }
 }

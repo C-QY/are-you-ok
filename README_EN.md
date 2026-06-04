@@ -157,14 +157,15 @@ This is `are-you-ok`'s most unique feature. When network error signals appear in
 | Platform | Requirement |
 |----------|-------------|
 | Windows | PowerShell 5.1+ |
-| Mac / Linux | bash |
+| Mac | bash · afplay (built-in) |
+| Linux | bash · mpg123 or ffplay (optional, for audio) |
 | All platforms | `git` (optional) |
 
 ---
 
-## Easter Egg
+## OK Audio
 
-Triggers only on the exact phrase `are you ok` (case-insensitive). Other trigger phrases do not activate it. Enabled by default — status output follows immediately after.
+Triggers only on the exact phrase `are you ok` (case-insensitive). Other trigger phrases do not activate it. The status box outputs immediately after audio starts — they don't block each other.
 
 ```
 ╭──────────────────────────────────╮
@@ -172,18 +173,23 @@ Triggers only on the exact phrase `are you ok` (case-insensitive). Other trigger
 │      Lei Jun · Shanghai · 2015   │
 ╰──────────────────────────────────╯
 ```
+> Falls back to text-only when no audio file is present — the skill works normally either way.
 
 **Enable audio:** Place `eleijun-are-you-ok.mp3` (or `.wav`) in the `assets/` folder. It plays automatically on trigger.
 > Search "雷军 are you ok" on Bilibili or YouTube, trim to ~3 seconds, save as `eleijun-are-you-ok.mp3`.
 
 | File | Effect |
 |------|--------|
-| `assets/eleijun-are-you-ok.mp3` | Plays audio |
+| `assets/eleijun-are-you-ok.mp3` | Plays audio (preferred) |
 | `assets/eleijun-are-you-ok.wav` | Plays audio (fallback format) |
 
-If no media files are present, a text-only Easter egg is shown — the skill works normally either way.
+**Disable audio:** Create an empty `.no-audio` file in the `assets/` directory. Audio is silently skipped; the status box still outputs normally.
 
-**Fully disable:** Delete `scripts/play-easter-egg.ps1` and `scripts/play-easter-egg.sh`.
+```bash
+touch ~/.claude/skills/are-you-ok/assets/.no-audio
+```
+
+**Fully remove OK audio:** Delete `scripts/play-ok-audio.ps1` and `scripts/play-ok-audio.sh`.
 
 ---
 

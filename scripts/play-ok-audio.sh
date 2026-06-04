@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
-# play-easter-egg.sh
+# play-ok-audio.sh
 # Triggered only by the exact phrase "are you ok".
 # Plays assets/eleijun-are-you-ok.mp3 if present; falls back to text.
+# To disable audio: create assets/.no-audio
 
 assets_dir="$(dirname "$0")/../assets"
 mp3="$assets_dir/eleijun-are-you-ok.mp3"
 played=false
+
+[ -f "$assets_dir/.no-audio" ] && exit 0
 
 if [ -f "$mp3" ]; then
   if command -v afplay &>/dev/null; then
@@ -21,5 +24,5 @@ if [ -f "$mp3" ]; then
 fi
 
 if [ "$played" = false ]; then
-  echo "easter_egg:ok"
+  echo "ok_audio:not_found"
 fi
