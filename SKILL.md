@@ -53,7 +53,7 @@ If the script returns `ok_audio:not_found` (no audio file found), render this be
 ╰──────────────────────────────────╯
 ```
 
-If the script returns `ok_audio:playing` (audio started), proceed directly to the status box — no extra output needed.
+If the script returns `ok_audio:playing` (background process started), proceed directly to the status box — no extra output needed. This signal means the process launched successfully, not that audio completed; playback failures are silent and outside the skill's scope.
 
 **Step 2 — Determine mode and language**
 

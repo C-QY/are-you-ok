@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # status-check.sh - Layer 3 data collector for the are-you-ok skill (Mac/Linux)
 # Usage: status-check.sh [--ok-audio] [--network-check]
+# Both flags can be passed simultaneously; each is handled by an independent loop.
 
 # NETWORK CHECK - quick DNS probe, runs before data collection
 for arg in "$@"; do
@@ -95,18 +96,20 @@ if [ -f "$cwd/CLAUDE.md" ]; then
   [ -n "$brief" ] && echo "claude_brief:$brief"
 fi
 
-# MEMORY - count only; omit entirely when not found (agent skips the memory line)
-encoded=$(pwd | sed 's/://g' | sed 's|[/\\]|-|g')
-project_mem="$HOME/.claude/projects/$encoded/memory/MEMORY.md"
-if [ -f "$project_mem" ]; then
-  mem_file="$project_mem"
-else
-  mem_file=$(find "$HOME/.claude" -maxdepth 6 -name "MEMORY.md" 2>/dev/null | head -1)
-fi
-if [ -n "$mem_file" ]; then
-  count=$(grep -c "^- \[" "$mem_file" 2>/dev/null || echo 0)
-  echo "memory_path:$mem_file"
-  echo "memory_count:$count"
+# MEMORY - Claude Code only (~/.claude must exist); omit entirely in other environments
+if [ -d "$HOME/.claude" ]; then
+  encoded=$(pwd | sed 's/://g' | sed 's|[/\\]|-|g')
+  project_mem="$HOME/.claude/projects/$encoded/memory/MEMORY.md"
+  if [ -f "$project_mem" ]; then
+    mem_file="$project_mem"
+  else
+    mem_file=$(find "$HOME/.claude" -maxdepth 6 -name "MEMORY.md" 2>/dev/null | head -1)
+  fi
+  if [ -n "$mem_file" ]; then
+    count=$(grep -c "^- \[" "$mem_file" 2>/dev/null || echo 0)
+    echo "memory_path:$mem_file"
+    echo "memory_count:$count"
+  fi
 fi
 
 exit 0
