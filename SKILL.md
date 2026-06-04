@@ -220,6 +220,8 @@ Omit empty detail blocks entirely.
 - Agent caller: replace top border label with caller identity
 - git not a repo: CN `非代码仓库` / EN `not a repo`
 - memory not found (no `memory_count` in script output): omit 记忆 / memory line entirely
+- 后台 / jobs line: omit when 无 / none (0 running)
+- 任务 / tasks line: omit when all three counts are 0
 - Do NOT expose secrets, tokens, or passwords
 - Do NOT add prose outside the box
 - Recovery mode: `network_status:ok` → `✓ 已恢复` / `✓ restored`; `fail` → `✗ 仍然异常` / `✗ still down`
@@ -238,7 +240,6 @@ Omit empty detail blocks entirely.
 │  记忆   4 条                                         │
 │  任务   ●2 进行中  ○1 待处理  ✓3 已完成               │
 │  工具   Read Write Edit Glob Grep                    │
-│  后台   无                                           │
 │                                                      │
 ├─ 进行中 ─────────────────────────────────────────────┤
 │  ●  实现结果列表的分页功能                              │
