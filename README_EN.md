@@ -155,10 +155,6 @@ The status box renders normally after the Easter egg.
 
 ---
 
-### Enable GIF
-
-Place `eleijun-are-you-ok.gif` in the `assets/` folder. It opens in your default viewer on trigger.
-
 ### Enable Audio
 
 Place `eleijun-are-you-ok.mp3` (or `eleijun-are-you-ok.wav`) in the `assets/` folder. It plays automatically on trigger.

@@ -165,10 +165,6 @@ chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
 
 ---
 
-### 启用 GIF
-
-将 `eleijun-are-you-ok.gif` 放入 `assets/` 文件夹，触发时用系统默认程序弹出。
-
 ### 启用音频
 
 将 `eleijun-are-you-ok.mp3`（或 `eleijun-are-you-ok.wav`）放入 `assets/` 文件夹，触发时自动播放。
