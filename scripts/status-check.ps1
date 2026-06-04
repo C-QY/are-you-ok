@@ -1,14 +1,32 @@
 # status-check.ps1 - Layer 3 data collector for the are-you-ok skill (Windows)
 # Usage: status-check.ps1 [-EasterEgg]
-param([switch]$EasterEgg)
+param([switch]$EasterEgg, [switch]$NetworkCheck)
+
+# NETWORK CHECK - quick DNS probe, runs before data collection
+if ($NetworkCheck) {
+    try {
+        [System.Net.Dns]::GetHostAddresses("api.anthropic.com") | Out-Null
+        Write-Output "network_status:ok"
+    } catch {
+        Write-Output "network_status:fail"
+    }
+}
 
 # EASTER EGG - play audio first so it starts while data is collected
 if ($EasterEgg) {
     $mp3 = Join-Path $PSScriptRoot "..\assets\eleijun-are-you-ok.mp3"
     $wav = Join-Path $PSScriptRoot "..\assets\eleijun-are-you-ok.wav"
-    if (Test-Path $mp3)      { Start-Process $mp3 }
-    elseif (Test-Path $wav)  { Start-Process $wav }
-    else                     { Write-Output 'easter_egg:ok' }
+    if (Test-Path $mp3) {
+        $fullPath = (Resolve-Path $mp3).Path
+        Start-Process powershell -WindowStyle Hidden -ArgumentList '-NoProfile', '-Command',
+            "Add-Type -AssemblyName PresentationCore; `$p = New-Object System.Windows.Media.MediaPlayer; `$p.Open([uri]::new('$fullPath')); `$p.Play(); Start-Sleep 15"
+    } elseif (Test-Path $wav) {
+        $fullPath = (Resolve-Path $wav).Path
+        Start-Process powershell -WindowStyle Hidden -ArgumentList '-NoProfile', '-Command',
+            "Add-Type -AssemblyName System.Windows.Forms; (New-Object System.Media.SoundPlayer '$fullPath').PlaySync()"
+    } else {
+        Write-Output 'easter_egg:ok'
+    }
 }
 
 $cwd = (Get-Location).Path

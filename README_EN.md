@@ -6,12 +6,13 @@
 
 ---
 
-## Two Modes
+## Three Modes
 
-| Mode | Focus | Triggers |
+| Mode | Focus | Trigger |
 |------|-------|---------|
 | **Agent Status** | Model, tools, tasks, memory | `are you ok` · `status check` · `report status` |
 | **Project Status** | Name, version, commits, changes | `project status` · `project progress` · `show project` |
+| **Network Recovery** | Network status, uncommitted changes, recovery steps | **Auto-triggered** — no user input needed |
 
 Agent call: `!status` or `{"skill":"are-you-ok","mode":"agent|project"}`
 
@@ -69,6 +70,42 @@ Agent call: `!status` or `{"skill":"are-you-ok","mode":"agent|project"}`
 │  project-alpha   backend migration goals             │
 └──────────────────────────────────────────────────────┘
 ```
+
+**Network Recovery mode** (auto-triggered, no input needed):
+```
+┌─ NETWORK RECOVERY ────────────── 2026-06-04 10:30 ──┐
+│                                                      │
+│  network  ✓ restored                                 │
+│  git      2Δ uncommitted  ·  "feat: add user search" │
+│  jobs     none                                       │
+│  tasks    ●1 active  ○2 pending                      │
+│                                                      │
+├─ RECOVERY STEPS ─────────────────────────────────────┤
+│  1. Identify the interrupted tool call / operation   │
+│  2. Verify actual state with read-only ops first     │
+│  3. Check background jobs — still running or hung?   │
+│  4. Confirm state before resuming any writes         │
+└──────────────────────────────────────────────────────┘
+```
+
+---
+
+## Network Recovery Mode
+
+Triggers **automatically** when network error signals appear in the conversation context — no user input required.
+
+**Recognizes network interruptions across major AI tools:**
+
+| Tool | Detected signals |
+|------|-----------------|
+| Claude Code | `socket connection was closed unexpectedly` · `Streamable HTTP error` |
+| ChatGPT / OpenAI | `network error` · `Failed to fetch` · `The network connection was lost` |
+| GitHub Copilot | `Copilot is not reachable` · `Connection to GitHub Copilot failed` |
+| Cursor | `Could not connect to language model` |
+| Gemini | `UNAVAILABLE` · `deadline exceeded` · `transport error` |
+| Universal signals | `ECONNRESET` · `ETIMEDOUT` · `ENOTFOUND` · `502` · `503` |
+
+**Does NOT trigger on:** user-initiated exits (no error signal), token limit errors, content policy rejections.
 
 ---
 

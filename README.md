@@ -6,12 +6,13 @@
 
 ---
 
-## 两种模式
+## 三种模式
 
-| 模式 | 聚焦 | 触发词 |
+| 模式 | 聚焦 | 触发方式 |
 |------|------|--------|
 | **Agent 状态** | 模型、工具、任务、记忆 | `are you ok` · `你还好吗` · `状态怎么样` · `汇报进度` |
 | **项目进度** | 项目名、版本、提交、变更 | `项目进度` · `项目状态` · `项目情况` · `汇报项目` |
+| **网络恢复** | 网络状态、未提交变更、恢复步骤 | **自动触发**，无需用户输入 |
 
 Agent 调用：`!status` 或 `{"skill":"are-you-ok","mode":"agent|project"}`
 
@@ -69,6 +70,42 @@ Agent 调用：`!status` 或 `{"skill":"are-you-ok","mode":"agent|project"}`
 │  project-alpha   后端迁移目标与当前阶段                 │
 └──────────────────────────────────────────────────────┘
 ```
+
+**网络恢复模式**（自动触发，无需输入）：
+```
+┌─ 网络恢复 ──────────────────── 2026-06-04 10:30 ────┐
+│                                                      │
+│  网络   ✓ 已恢复                                     │
+│  git    2Δ 未提交  ·  "feat: 新增用户搜索"            │
+│  后台   无                                           │
+│  任务   ●1 进行中  ○2 待处理                          │
+│                                                      │
+├─ 恢复步骤 ───────────────────────────────────────────┤
+│  1. 回顾中断点：哪一步工具调用可能未完成？               │
+│  2. 用只读操作验证实际状态（Read/Grep）不要直接继续写    │
+│  3. 有后台任务时确认是否仍在运行还是已挂起               │
+│  4. 确认后再继续下一步操作                              │
+└──────────────────────────────────────────────────────┘
+```
+
+---
+
+## 网络恢复模式
+
+当对话上下文中出现**网络错误信号**时自动触发，无需用户输入任何关键词。
+
+**自动识别以下主流工具的网络中断：**
+
+| 工具 | 识别的错误信号 |
+|------|--------------|
+| Claude Code | `socket connection was closed unexpectedly` · `Streamable HTTP error` |
+| ChatGPT / OpenAI | `network error` · `Failed to fetch` · `The network connection was lost` |
+| GitHub Copilot | `Copilot is not reachable` · `Connection to GitHub Copilot failed` |
+| Cursor | `Could not connect to language model` |
+| Gemini | `UNAVAILABLE` · `deadline exceeded` · `transport error` |
+| 通用底层信号 | `ECONNRESET` · `ETIMEDOUT` · `ENOTFOUND` · `502` · `503` |
+
+**不触发的情况：** 用户主动结束对话（无错误信号）、token 超限、内容违规等业务错误。
 
 ---
 

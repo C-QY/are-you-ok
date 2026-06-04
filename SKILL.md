@@ -4,8 +4,22 @@ description: >-
   Print a structured status snapshot of the current agent session or active project.
   Agent mode: model, git, memory, tasks, tools, jobs.
   Project mode: project name/type, version, recent commits, changed files.
+  Recovery mode: network status, uncommitted changes, jobs, tasks, recovery steps.
   Trigger — agent: "are you ok", "你还好吗", "状态怎么样", "汇报进度", "当前状态", !status.
   Trigger — project: "项目进度", "项目状态", "项目情况", "project status", "project progress".
+  Trigger — recovery (AUTO, no user input needed): invoke automatically at the start of a
+  conversation turn when the context contains ANY of these network error signals —
+  Claude Code: "socket connection was closed unexpectedly", "Streamable HTTP error",
+  "claude.ai proxy connection failed";
+  OpenAI/GPT: "network error", "Failed to fetch", "The network connection was lost",
+  "Error communicating with ChatGPT";
+  Copilot: "Copilot is not reachable", "Connection to GitHub Copilot failed";
+  Cursor: "Could not connect to language model";
+  Gemini: "UNAVAILABLE", "deadline exceeded", "transport error";
+  Universal: "ECONNRESET", "ECONNREFUSED", "ETIMEDOUT", "ENOTFOUND", "ERR_NETWORK",
+  "502", "503", "request timeout", "connection was closed", "connection interrupted".
+  Do NOT auto-invoke if user voluntarily ended the conversation with no error signals.
+  Do NOT auto-invoke for business errors (token limit, content policy, etc.).
   Output language: Chinese for CN triggers and "are you ok"; English otherwise.
 allowed_tools: [PowerShell, Bash, Read, Glob]
 resources:
@@ -20,9 +34,11 @@ resources:
 
 - Windows: `scripts/status-check.ps1` — add `-EasterEgg` flag if trigger is `are you ok`
 - Mac/Linux: `scripts/status-check.sh` — add `--easter-egg` flag if trigger is `are you ok`
+- Recovery trigger: add `-NetworkCheck` flag (Windows) / `--network-check` flag (Mac/Linux)
 
 Do NOT read the script into context — execute it. Captures: cwd, project_name,
 project_type, git branch/tag/log×3/changes, claude_brief, memory count.
+With `-NetworkCheck`: also outputs `network_status:ok` or `network_status:fail`.
 With the easter egg flag, audio plays automatically in the background.
 
 If the script returns `easter_egg:ok` (no audio file found), render this before the status box:
@@ -44,6 +60,7 @@ If the script returns `easter_egg:ok` (no audio file found), render this before 
 | EN project phrase | Project | English |
 | `!status` / JSON call | Agent | English |
 | `{"skill":"are-you-ok","mode":"project"}` | Project | English |
+| network error signal in context (auto) | Recovery | matches context lang |
 
 **Step 3 — Collect agent-side context**
 
@@ -155,6 +172,40 @@ Omit empty detail blocks entirely.
 └──────────────────────────────────────────────────────┘
 ```
 
+### Recovery Mode — Chinese
+```
+┌─ 网络恢复 ──────────────────── {YYYY-MM-DD HH:MM} ──┐
+│                                                      │
+│  网络   ✓ 已恢复 / ✗ 仍然异常                        │
+│  git    {N}Δ 未提交  ·  "{last commit msg}"          │
+│  后台   {N} 个 / 无                                  │
+│  任务   ●{N} 进行中  ○{N} 待处理                     │
+│                                                      │
+├─ 恢复步骤 ───────────────────────────────────────────┤
+│  1. 回顾中断点：哪一步工具调用可能未完成？               │
+│  2. 用只读操作验证实际状态（Read/Grep）不要直接继续写    │
+│  3. 有后台任务时确认是否仍在运行还是已挂起               │
+│  4. 确认后再继续下一步操作                              │
+└──────────────────────────────────────────────────────┘
+```
+
+### Recovery Mode — English
+```
+┌─ NETWORK RECOVERY ────────────── {YYYY-MM-DD HH:MM} ┐
+│                                                      │
+│  network  ✓ restored / ✗ still down                 │
+│  git      {N}Δ uncommitted  ·  "{last commit msg}"  │
+│  jobs     {N} running / none                         │
+│  tasks    ●{N} active  ○{N} pending                  │
+│                                                      │
+├─ RECOVERY STEPS ─────────────────────────────────────┤
+│  1. Identify the interrupted tool call / operation   │
+│  2. Verify actual state with read-only ops first     │
+│  3. Check background jobs — still running or hung?   │
+│  4. Confirm state before resuming any writes         │
+└──────────────────────────────────────────────────────┘
+```
+
 ## Rendering Rules
 
 - Omit any detail block if its content is empty
@@ -169,6 +220,9 @@ Omit empty detail blocks entirely.
 - memory not found: CN `无` / EN `none`
 - Do NOT expose secrets, tokens, or passwords
 - Do NOT add prose outside the box
+- Recovery mode: `network_status:ok` → `✓ 已恢复` / `✓ restored`; `fail` → `✗ 仍然异常` / `✗ still down`
+- Recovery mode: omit git line if not a repo; omit jobs/tasks lines if both are zero/none
+- Recovery mode: 恢复步骤 / RECOVERY STEPS are fixed 4 lines, never omitted
 
 ## Example Output
 
