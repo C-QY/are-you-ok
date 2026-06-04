@@ -1,4 +1,4 @@
-﻿# are-you-ok
+# are-you-ok
 
 > A lightweight skill for users and supervisor agents to instantly check any AI agent's current state or an active project's progress.
 
@@ -22,53 +22,52 @@ Agent call: `!status` or `{"skill":"are-you-ok","mode":"agent|project"}`
 
 **Agent mode** (`status check`):
 ```
-┌─ STATUS ──────────────────────── 2026-06-03 14:32 ──┐
-│                                                      │
-│  agent    claude-sonnet-4-6                          │
-│  cwd      ~/projects/my-app                          │
-│  git      main · 2Δ · "feat: add user search"        │
-│  memory   4 entries                                  │
-│  tasks    ●2 active  ○1 pending  ✓3 done             │
-│  tools    Read Write Edit Glob Grep                  │
-│  jobs     none                                       │
-│                                                      │
-├─ ACTIVE ─────────────────────────────────────────────┤
-│  ●  implement pagination for the results list        │
-│  ●  write unit tests for the auth module             │
-├─ PENDING ────────────────────────────────────────────┤
-│  ○  update API documentation                         │
-├─ MEMORY ─────────────────────────────────────────────┤
-│  project-alpha   backend migration goals             │
-└──────────────────────────────────────────────────────┘
+👌 STATUS ─── 2026-06-03 14:32
+│
+│  agent    claude-sonnet-4-6
+│  cwd      ~/projects/my-app
+│  git      main · 2Δ · "feat: add user search"
+│  memory   4 entries
+│  tasks    ●2 active  ○1 pending  ✓3 done
+│  tools    Read Write Edit Glob Grep
+│
+├─ ACTIVE ───────────────────────────────────────
+│  ●  implement pagination for the results list
+│  ●  write unit tests for the auth module
+├─ PENDING ──────────────────────────────────────
+│  ○  update API documentation
+├─ MEMORY ───────────────────────────────────────
+│  project-alpha   backend migration goals
+╰────────────────────────────────────────────────
 ```
 
 **Project mode** (`project status`):
 ```
-┌─ PROJECT STATUS ────────────── 2026-06-03 14:32 ────┐
-│                                                      │
-│  project  my-app  [Node.js]                          │
-│  version  v1.2.0                                     │
-│  cwd      ~/projects/my-app                          │
-│  git      main · 3Δ · "feat: add user search"        │
-│  memory   4 entries                                  │
-│  tasks    ●2 active  ○3 pending  ✓8 done             │
-│  agent    claude-sonnet-4-6                          │
-│                                                      │
-├─ PROJECT BRIEF ──────────────────────────────────────┤
-│  Full-stack Node.js app, RESTful API + React frontend│
-├─ RECENT COMMITS ─────────────────────────────────────┤
-│  a1b2c3d  feat: add user search                      │
-│  e4f5g6h  fix: login redirect issue                  │
-│  i7j8k9l  chore: upgrade dependencies                │
-├─ ACTIVE ─────────────────────────────────────────────┤
-│  ●  implement pagination for the results list        │
-├─ PENDING ────────────────────────────────────────────┤
-│  ○  update API documentation                         │
-├─ RECENT CHANGES ─────────────────────────────────────┤
-│  src/components/SearchBar.tsx                        │
-├─ MEMORY ─────────────────────────────────────────────┤
-│  project-alpha   backend migration goals             │
-└──────────────────────────────────────────────────────┘
+👌 PROJECT STATUS ─── 2026-06-03 14:32
+│
+│  project  my-app  [Node.js]
+│  version  v1.2.0
+│  cwd      ~/projects/my-app
+│  git      main · 3Δ · "feat: add user search"
+│  memory   4 entries
+│  tasks    ●2 active  ○3 pending  ✓8 done
+│  agent    claude-sonnet-4-6
+│
+├─ PROJECT BRIEF ────────────────────────────────
+│  Full-stack Node.js app, RESTful API + React frontend
+├─ RECENT COMMITS ───────────────────────────────
+│  a1b2c3d  feat: add user search
+│  e4f5g6h  fix: login redirect issue
+│  i7j8k9l  chore: upgrade dependencies
+├─ ACTIVE ───────────────────────────────────────
+│  ●  implement pagination for the results list
+├─ PENDING ──────────────────────────────────────
+│  ○  update API documentation
+├─ RECENT CHANGES ───────────────────────────────
+│  src/components/SearchBar.tsx
+├─ MEMORY ───────────────────────────────────────
+│  project-alpha   backend migration goals
+╰────────────────────────────────────────────────
 ```
 
 **Network Recovery mode** (auto-triggered, no input needed):

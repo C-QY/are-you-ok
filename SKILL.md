@@ -219,6 +219,7 @@ Omit empty detail blocks entirely.
 - Cap memory entries at 10; append `(+N more)` if exceeded
 - Cap recent commits at 3; cap recent changes at 10
 - Truncate any value line exceeding 50 chars with `…`
+- Box style: open right side — left border `│` always aligns; no right border needed
 - Agent caller: replace top border label with caller identity
 - git not a repo: CN `非代码仓库` / EN `not a repo`
 - memory not found (no `memory_count` in script output): omit 记忆 / memory line entirely
