@@ -9,10 +9,18 @@ if (Test-Path $tmp) { Remove-Item $tmp -Recurse -Force }
 git clone $repo $tmp
 if ($LASTEXITCODE -ne 0) { Write-Error "Clone failed. Make sure git is installed."; exit 1 }
 
-if (Test-Path $dest) { Remove-Item $dest -Recurse -Force }
-New-Item -ItemType Directory -Path (Split-Path $dest) -Force | Out-Null
-Copy-Item $tmp $dest -Recurse
-Remove-Item $tmp -Recurse -Force
+if (Test-Path "$dest\.git") {
+    # Already installed — update in place to avoid directory-in-use errors
+    Remove-Item $tmp -Recurse -Force
+    Push-Location $dest
+    git pull origin master
+    if ($LASTEXITCODE -ne 0) { Write-Error "Update failed."; exit 1 }
+    Pop-Location
+} else {
+    New-Item -ItemType Directory -Path (Split-Path $dest) -Force | Out-Null
+    Copy-Item $tmp $dest -Recurse -Force
+    Remove-Item $tmp -Recurse -Force
+}
 
 Write-Host ""
 Write-Host "  are-you-ok installed." -ForegroundColor Green

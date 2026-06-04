@@ -8,13 +8,17 @@ REPO="https://github.com/C-QY/are-you-ok"
 DEST="$HOME/.claude/skills/are-you-ok"
 TMP="$(mktemp -d)/are-you-ok"
 
-git clone "$REPO" "$TMP"
-
-mkdir -p "$(dirname "$DEST")"
-rm -rf "$DEST"
-cp -r "$TMP" "$DEST"
+if [ -d "$DEST/.git" ]; then
+    # Already installed — update in place
+    rm -rf "$TMP"
+    cd "$DEST" && git pull origin master
+else
+    git clone "$REPO" "$TMP"
+    mkdir -p "$(dirname "$DEST")"
+    cp -r "$TMP" "$DEST"
+    rm -rf "$(dirname "$TMP")"
+fi
 chmod +x "$DEST/scripts/status-check.sh"
-rm -rf "$(dirname "$TMP")"
 
 echo ""
 echo "  are-you-ok installed."
