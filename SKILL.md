@@ -6,6 +6,7 @@ description: >-
   Project mode: project name/type, version, recent commits, changed files.
   Recovery mode: network status, uncommitted changes, jobs, tasks, recovery steps.
   Trigger — agent: "are you ok", "你还好吗", "状态怎么样", "汇报进度", "当前状态", !status.
+  Trigger — inline peek: ?, ??, ??? — finish the current response first, then append the status box.
   Trigger — project: "项目进度", "项目状态", "项目情况", "project status", "project progress".
   Trigger — recovery (AUTO, no user input needed): invoke automatically at the start of a
   conversation turn when the context contains ANY of these network error signals —
@@ -62,7 +63,10 @@ If the script returns `easter_egg:ok` (no audio file found), render this before 
 | EN project phrase | Project | English |
 | `!status` / JSON call | Agent | English |
 | `{"skill":"are-you-ok","mode":"project"}` | Project | English |
+| `?` / `??` / `???` | Inline peek | matches context lang |
 | network error signal in context (auto) | Recovery | matches context lang |
+
+**Inline peek behavior** (`?` / `??` / `???`): Complete the current response or task first, then append the status box at the end — do not interrupt ongoing work.
 
 **Step 3 — Collect agent-side context**
 
