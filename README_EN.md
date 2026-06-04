@@ -1,27 +1,71 @@
 # are-you-ok
 
-> A lightweight skill for users and supervisor agents to instantly check any AI agent's current state or an active project's progress.
+> A lightweight status skill for Claude Code — check agent progress in one phrase, and automatically recover context after a network drop.
 
-**[中文版本 →](README.md)**
+**[中文 →](README.md)**
 
 ---
 
-## Three Modes
+## Quick Install
 
-| Mode | Focus | Trigger |
-|------|-------|---------|
-| **Agent Status** | Model, tools, tasks, memory | `are you ok` · `status check` · `report status` |
-| **Project Status** | Name, version, commits, changes | `project status` · `project progress` · `show project` |
-| **Inline Peek** | Status appended after current response | `?` · `??` · `???` (answers first, status follows) |
-| **Network Recovery** | Network status, uncommitted changes, recovery steps | **Auto-triggered** — no user input needed |
+**Windows (PowerShell):**
+```powershell
+irm https://raw.githubusercontent.com/C-QY/are-you-ok/master/install.ps1 | iex
+```
 
-Agent call: `!status` or `{"skill":"are-you-ok","mode":"agent|project"}`
+**Mac / Linux:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/C-QY/are-you-ok/master/install.sh | bash
+```
+
+Restart Claude Code after installing, then say `are you ok`.
+
+<details>
+<summary>Manual install</summary>
+
+```bash
+git clone https://github.com/C-QY/are-you-ok
+```
+Copy the `are-you-ok/` folder to:
+```
+~/.claude/skills/are-you-ok/
+```
+Mac / Linux — one extra step:
+```bash
+chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
+```
+</details>
+
+---
+
+## What Problem Does It Solve
+
+During long Claude Code sessions, you might run into:
+
+- Not knowing what step the agent is currently on
+- Network drops that make the agent lose track of where it was
+- Wanting a quick snapshot of git state, task list, and memory without interrupting the flow
+
+`are-you-ok` delivers a full status snapshot in one phrase, and **automatically** guides the agent back on track after a network interruption.
+
+---
+
+## Four Modes
+
+| Mode | Trigger | What it shows |
+|------|---------|---------------|
+| **Agent Status** | `are you ok` · `status check` · `report status` | Model, tools, tasks, memory |
+| **Project Status** | `project status` · `project progress` · `show project` | Name, version, commits, changed files |
+| **Inline Peek** | `?` · `??` · `???` | Answers first, appends status summary at the end |
+| **Network Recovery** | Auto-triggered — no input needed | Detects network error signals, outputs recovery steps |
+
+Programmatic call: `!status` or `{"skill":"are-you-ok","mode":"agent|project"}`
 
 ---
 
 ## Sample Output
 
-**Agent mode** (`status check`):
+**Agent mode** (`are you ok`):
 ```
 👌 STATUS ─── 2026-06-03 14:32
 │
@@ -71,7 +115,13 @@ Agent call: `!status` or `{"skill":"are-you-ok","mode":"agent|project"}`
 ╰────────────────────────────────────────────────
 ```
 
-**Network Recovery mode** (auto-triggered, no input needed):
+---
+
+## Network Recovery Mode
+
+This is `are-you-ok`'s most unique feature. When network error signals appear in the conversation context, it **auto-triggers** — no user input required — and immediately outputs a disconnect summary with recovery steps.
+
+**Sample network recovery output:**
 ```
 👌 NETWORK RECOVERY ─── 2026-06-04 10:30
 │
@@ -81,19 +131,13 @@ Agent call: `!status` or `{"skill":"are-you-ok","mode":"agent|project"}`
 │
 ├─ RECOVERY STEPS ───────────────────────────────
 │  1. Identify the interrupted tool call / operation
-│  2. Verify actual state with read-only ops first
+│  2. Verify actual state with read-only ops first (Read/Grep)
 │  3. Check background jobs — still running or hung?
 │  4. Confirm state before resuming any writes
 ╰────────────────────────────────────────────────
 ```
 
----
-
-## Network Recovery Mode
-
-Triggers **automatically** when network error signals appear in the conversation context — no user input required.
-
-**Recognizes network interruptions across major AI tools:**
+**Recognized network error signals:**
 
 | Tool | Detected signals |
 |------|-----------------|
@@ -108,80 +152,6 @@ Triggers **automatically** when network error signals appear in the conversation
 
 ---
 
-## Installation
-
-**Windows (PowerShell):**
-```powershell
-irm https://raw.githubusercontent.com/C-QY/are-you-ok/master/install.ps1 | iex
-```
-
-**Mac / Linux:**
-```bash
-curl -fsSL https://raw.githubusercontent.com/C-QY/are-you-ok/master/install.sh | bash
-```
-
-Restart Claude Code after installing, then say `are you ok`.
-
-<details>
-<summary>Manual install</summary>
-
-```
-git clone https://github.com/C-QY/are-you-ok
-```
-Copy the `are-you-ok/` folder to:
-```
-~/.claude/skills/are-you-ok/
-```
-Mac / Linux — one extra step:
-```bash
-chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
-```
-</details>
-
----
-
-## Easter Egg
-
-Triggers only when the exact phrase `are you ok` is used (case-insensitive). Other trigger phrases do not activate it. Enabled by default.
-
-**Effect:**
-```
-╭──────────────────────────────────╮
-│  🎤  "Are you OK?"               │
-│      Lei Jun · Shanghai · 2015   │
-╰──────────────────────────────────╯
-```
-The status box renders normally after the Easter egg.
-
----
-
-### Enable Audio
-
-Place `eleijun-are-you-ok.mp3` (or `eleijun-are-you-ok.wav`) in the `assets/` folder. It plays automatically on trigger.
-
-Supported files:
-
-| File | Effect |
-|------|--------|
-| `assets/eleijun-are-you-ok.mp3` | Plays audio |
-| `assets/eleijun-are-you-ok.wav` | Plays audio (fallback format) |
-
-If no media files are present, a text-only Easter egg is shown — the skill works normally either way.
-
----
-
-### Disable the Easter Egg
-
-Remove the media files from `assets/` to disable the corresponding effects.
-
-To completely disable the Easter egg logic, delete:
-```
-scripts/play-easter-egg.ps1
-scripts/play-easter-egg.sh
-```
-
----
-
 ## Requirements
 
 | Platform | Requirement |
@@ -192,9 +162,34 @@ scripts/play-easter-egg.sh
 
 ---
 
+## Easter Egg
+
+Triggers only on the exact phrase `are you ok` (case-insensitive). Other trigger phrases do not activate it. Enabled by default — status output follows immediately after.
+
+```
+╭──────────────────────────────────╮
+│  🎤  "Are you OK?"               │
+│      Lei Jun · Shanghai · 2015   │
+╰──────────────────────────────────╯
+```
+
+**Enable audio:** Place `eleijun-are-you-ok.mp3` (or `.wav`) in the `assets/` folder. It plays automatically on trigger.
+> Search "雷军 are you ok" on Bilibili or YouTube, trim to ~3 seconds, save as `eleijun-are-you-ok.mp3`.
+
+| File | Effect |
+|------|--------|
+| `assets/eleijun-are-you-ok.mp3` | Plays audio |
+| `assets/eleijun-are-you-ok.wav` | Plays audio (fallback format) |
+
+If no media files are present, a text-only Easter egg is shown — the skill works normally either way.
+
+**Fully disable:** Delete `scripts/play-easter-egg.ps1` and `scripts/play-easter-egg.sh`.
+
+---
+
 ## Design Principles
 
-**Fast · Lightweight · Universal** — scripts collect metadata only, never actual content. Before any change: does this add extra overhead? If yes, skip it.
+**Fast · Lightweight · Universal** — scripts collect metadata only, never actual file content. Before any change, ask: does this add extra overhead?
 
 | Layer | File | Token cost |
 |-------|------|-----------|
