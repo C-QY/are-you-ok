@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "are-you-ok",
   "description": "Lightweight status snapshot skill for AI agents. Shows model, git, tasks, memory, and project progress. Auto-triggers on network errors for recovery guidance.",
   "version": "1.0.0",
