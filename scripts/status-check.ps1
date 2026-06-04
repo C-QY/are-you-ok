@@ -1,5 +1,15 @@
 # status-check.ps1 - Layer 3 data collector for the are-you-ok skill (Windows)
-# Outputs workspace + project metadata only. Memory content is read by the agent.
+# Usage: status-check.ps1 [-EasterEgg]
+param([switch]$EasterEgg)
+
+# EASTER EGG - play audio first so it starts while data is collected
+if ($EasterEgg) {
+    $mp3 = Join-Path $PSScriptRoot "..\assets\eleijun-are-you-ok.mp3"
+    $wav = Join-Path $PSScriptRoot "..\assets\eleijun-are-you-ok.wav"
+    if (Test-Path $mp3)      { Start-Process $mp3 }
+    elseif (Test-Path $wav)  { Start-Process $wav }
+    else                     { Write-Output 'easter_egg:ok' }
+}
 
 $cwd = (Get-Location).Path
 
@@ -16,16 +26,11 @@ if (Test-Path (Join-Path $cwd "package.json")) {
         $pkg = Get-Content (Join-Path $cwd "package.json") -Raw | ConvertFrom-Json
         if ($pkg.name) { $projectName = $pkg.name }
     } catch {}
-} elseif (Test-Path (Join-Path $cwd "pyproject.toml")) {
-    $projectType = "Python"
-} elseif (Test-Path (Join-Path $cwd "setup.py")) {
-    $projectType = "Python"
-} elseif (Test-Path (Join-Path $cwd "go.mod")) {
-    $projectType = "Go"
-} elseif (Test-Path (Join-Path $cwd "Cargo.toml")) {
-    $projectType = "Rust"
-} elseif (Test-Path (Join-Path $cwd "pom.xml")) {
-    $projectType = "Java"
+} elseif (Test-Path (Join-Path $cwd "pyproject.toml")) { $projectType = "Python"
+} elseif (Test-Path (Join-Path $cwd "setup.py"))       { $projectType = "Python"
+} elseif (Test-Path (Join-Path $cwd "go.mod"))         { $projectType = "Go"
+} elseif (Test-Path (Join-Path $cwd "Cargo.toml"))     { $projectType = "Rust"
+} elseif (Test-Path (Join-Path $cwd "pom.xml"))        { $projectType = "Java"
 } elseif ((Get-ChildItem $cwd -Filter "*.csproj" -ErrorAction SilentlyContinue) -or
           (Get-ChildItem $cwd -Filter "*.sln"    -ErrorAction SilentlyContinue)) {
     $projectType = ".NET"
@@ -38,24 +43,19 @@ Write-Output "project_type:$projectType"
 try {
     $null = git rev-parse --is-inside-work-tree 2>$null
     if ($LASTEXITCODE -eq 0) {
-        $branch     = git rev-parse --abbrev-ref HEAD
-        $shortStat  = git status --short 2>$null
-        $count      = if ($shortStat) { ($shortStat | Measure-Object).Count } else { 0 }
-
-        # Latest tag
-        $tag = git describe --tags --abbrev=0 2>$null
+        $branch    = git rev-parse --abbrev-ref HEAD
+        $shortStat = git status --short 2>$null
+        $count     = if ($shortStat) { ($shortStat | Measure-Object).Count } else { 0 }
+        $tag       = git describe --tags --abbrev=0 2>$null
         if (-not $tag) { $tag = "none" }
-
-        # Last 3 commits
-        $commits = git log --format="%h %s" -3 2>$null
+        $commits   = git log --format="%h %s" -3 2>$null
 
         Write-Output "git_branch:$branch"
         Write-Output "git_uncommitted:$count"
         Write-Output "git_tag:$tag"
         $commits | ForEach-Object { Write-Output "git_log:$_" }
 
-        # Changed files
-        $changed = @()
+        $changed  = @()
         $changed += git diff --name-only 2>$null
         $changed += git diff --cached --name-only 2>$null
         $changed += git ls-files --others --exclude-standard 2>$null
@@ -83,7 +83,7 @@ if (Test-Path $claudeMd) {
 # MEMORY - count only, content is for the agent to read directly
 $memoryRoot = Join-Path $env:USERPROFILE ".claude\projects"
 if (Test-Path $memoryRoot) {
-    $memFile = Get-ChildItem -Path $memoryRoot -Recurse -Filter "MEMORY.md" -ErrorAction SilentlyContinue | Select-Object -First 1
+    $memFile = Get-ChildItem -Path $memoryRoot -Recurse -Depth 5 -Filter "MEMORY.md" -ErrorAction SilentlyContinue | Select-Object -First 1
     if ($memFile) {
         $entryCount = (Select-String -Path $memFile.FullName -Pattern "^- \[").Count
         Write-Output "memory_path:$($memFile.FullName)"

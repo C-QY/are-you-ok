@@ -11,21 +11,21 @@ allowed_tools: [PowerShell, Bash, Read, Glob]
 resources:
   - scripts/status-check.ps1
   - scripts/status-check.sh
+  - assets/eleijun-are-you-ok.mp3
 ---
 
 ## Workflow
 
 **Step 1 — Run the data collection script**
 
-- Windows: execute `scripts/status-check.ps1` via PowerShell
-- Mac/Linux: execute `scripts/status-check.sh` via Bash
+- Windows: `scripts/status-check.ps1` — add `-EasterEgg` flag if trigger is `are you ok`
+- Mac/Linux: `scripts/status-check.sh` — add `--easter-egg` flag if trigger is `are you ok`
 
 Do NOT read the script into context — execute it. Captures: cwd, project_name,
 project_type, git branch/tag/log×3/changes, claude_brief, memory count.
+With the easter egg flag, audio plays automatically in the background.
 
-If the trigger is exactly `are you ok` (case-insensitive), also execute
-`scripts/play-easter-egg.ps1` (Windows) or `scripts/play-easter-egg.sh` (Mac/Linux).
-If it returns `easter_egg:ok`, render this before the status box:
+If the script returns `easter_egg:ok` (no audio file found), render this before the status box:
 
 ```
 ╭──────────────────────────────────╮
