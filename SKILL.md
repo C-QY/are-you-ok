@@ -84,7 +84,7 @@ Omit empty detail blocks entirely.
 
 ### Agent Mode — Chinese
 ```
-👌─ 状态检查 ─── {YYYY-MM-DD HH:MM}
+👌  状态检查 ─── {YYYY-MM-DD HH:MM}
 │
 │  模型   {model}
 │  目录   {cwd}
@@ -104,7 +104,7 @@ Omit empty detail blocks entirely.
 
 ### Agent Mode — English
 ```
-👌─ STATUS ─── {YYYY-MM-DD HH:MM}
+👌  STATUS ─── {YYYY-MM-DD HH:MM}
 │
 │  agent    {model}
 │  cwd      {cwd}
@@ -124,7 +124,7 @@ Omit empty detail blocks entirely.
 
 ### Project Mode — Chinese
 ```
-👌─ 项目状态 ─── {YYYY-MM-DD HH:MM}
+👌  项目状态 ─── {YYYY-MM-DD HH:MM}
 │
 │  项目   {project_name}  [{project_type}]
 │  版本   {git_tag / 未发布}
@@ -151,7 +151,7 @@ Omit empty detail blocks entirely.
 
 ### Project Mode — English
 ```
-👌─ PROJECT STATUS ─── {YYYY-MM-DD HH:MM}
+👌  PROJECT STATUS ─── {YYYY-MM-DD HH:MM}
 │
 │  project  {project_name}  [{project_type}]
 │  version  {git_tag / untagged}
@@ -178,7 +178,7 @@ Omit empty detail blocks entirely.
 
 ### Recovery Mode — Chinese
 ```
-👌─ 网络恢复 ─── {YYYY-MM-DD HH:MM}
+👌  网络恢复 ─── {YYYY-MM-DD HH:MM}
 │
 │  网络   ✓ 已恢复 / ✗ 仍然异常
 │  git    {N}Δ 未提交  ·  "{last commit msg}"
@@ -195,7 +195,7 @@ Omit empty detail blocks entirely.
 
 ### Recovery Mode — English
 ```
-👌─ NETWORK RECOVERY ─── {YYYY-MM-DD HH:MM}
+👌  NETWORK RECOVERY ─── {YYYY-MM-DD HH:MM}
 │
 │  network  ✓ restored / ✗ still down
 │  git      {N}Δ uncommitted  ·  "{last commit msg}"
@@ -235,7 +235,7 @@ Omit empty detail blocks entirely.
 
 **Agent mode — Chinese** (`are you ok`):
 ```
-👌─ 状态检查 ─── 2026-06-03 14:32
+👌  状态检查 ─── 2026-06-03 14:32
 │
 │  模型   claude-sonnet-4-6
 │  目录   ~/projects/my-app
@@ -256,7 +256,7 @@ Omit empty detail blocks entirely.
 
 **Project mode — Chinese** (`项目进度`):
 ```
-👌─ 项目状态 ─── 2026-06-03 14:32
+👌  项目状态 ─── 2026-06-03 14:32
 │
 │  项目   my-app  [Node.js]
 │  版本   v1.2.0
