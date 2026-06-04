@@ -1,4 +1,4 @@
-﻿# are-you-ok skill installer for Windows (PowerShell 5.1+)
+# are-you-ok skill installer for Windows (PowerShell 5.1+)
 # Usage: irm https://raw.githubusercontent.com/C-QY/are-you-ok/master/install.ps1 | iex
 
 $repo = "https://github.com/C-QY/are-you-ok"
@@ -10,6 +10,7 @@ git clone $repo $tmp
 if ($LASTEXITCODE -ne 0) { Write-Error "Clone failed. Make sure git is installed."; exit 1 }
 
 if (Test-Path $dest) { Remove-Item $dest -Recurse -Force }
+New-Item -ItemType Directory -Path (Split-Path $dest) -Force | Out-Null
 Copy-Item $tmp $dest -Recurse
 Remove-Item $tmp -Recurse -Force
 

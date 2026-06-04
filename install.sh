@@ -10,6 +10,7 @@ TMP="$(mktemp -d)/are-you-ok"
 
 git clone "$REPO" "$TMP"
 
+mkdir -p "$(dirname "$DEST")"
 rm -rf "$DEST"
 cp -r "$TMP" "$DEST"
 chmod +x "$DEST/scripts/status-check.sh"

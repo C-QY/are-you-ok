@@ -12,6 +12,7 @@
 |------|-------|---------|
 | **Agent Status** | Model, tools, tasks, memory | `are you ok` · `status check` · `report status` |
 | **Project Status** | Name, version, commits, changes | `project status` · `project progress` · `show project` |
+| **Inline Peek** | Status appended after current response | `?` · `??` · `???` (answers first, status follows) |
 | **Network Recovery** | Network status, uncommitted changes, recovery steps | **Auto-triggered** — no user input needed |
 
 Agent call: `!status` or `{"skill":"are-you-ok","mode":"agent|project"}`
@@ -72,19 +73,18 @@ Agent call: `!status` or `{"skill":"are-you-ok","mode":"agent|project"}`
 
 **Network Recovery mode** (auto-triggered, no input needed):
 ```
-┌─ NETWORK RECOVERY ────────────── 2026-06-04 10:30 ──┐
-│                                                      │
-│  network  ✓ restored                                 │
-│  git      2Δ uncommitted  ·  "feat: add user search" │
-│  jobs     none                                       │
-│  tasks    ●1 active  ○2 pending                      │
-│                                                      │
-├─ RECOVERY STEPS ─────────────────────────────────────┤
-│  1. Identify the interrupted tool call / operation   │
-│  2. Verify actual state with read-only ops first     │
-│  3. Check background jobs — still running or hung?   │
-│  4. Confirm state before resuming any writes         │
-└──────────────────────────────────────────────────────┘
+👌 NETWORK RECOVERY ─── 2026-06-04 10:30
+│
+│  network  ✓ restored
+│  git      2Δ uncommitted  ·  "feat: add user search"
+│  tasks    ●1 active  ○2 pending
+│
+├─ RECOVERY STEPS ───────────────────────────────
+│  1. Identify the interrupted tool call / operation
+│  2. Verify actual state with read-only ops first
+│  3. Check background jobs — still running or hung?
+│  4. Confirm state before resuming any writes
+╰────────────────────────────────────────────────
 ```
 
 ---
