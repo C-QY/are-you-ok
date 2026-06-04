@@ -1,4 +1,4 @@
----
+﻿---
 name: are-you-ok
 description: >-
   Print a structured status snapshot of the current agent session or active project.
@@ -219,7 +219,7 @@ Omit empty detail blocks entirely.
 - Truncate any value line exceeding 50 chars with `…`
 - Agent caller: replace top border label with caller identity
 - git not a repo: CN `非代码仓库` / EN `not a repo`
-- memory not found: CN `无` / EN `none`
+- memory not found (no `memory_count` in script output): omit 记忆 / memory line entirely
 - Do NOT expose secrets, tokens, or passwords
 - Do NOT add prose outside the box
 - Recovery mode: `network_status:ok` → `✓ 已恢复` / `✓ restored`; `fail` → `✗ 仍然异常` / `✗ still down`

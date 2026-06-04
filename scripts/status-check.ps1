@@ -1,4 +1,4 @@
-# status-check.ps1 - Layer 3 data collector for the are-you-ok skill (Windows)
+﻿# status-check.ps1 - Layer 3 data collector for the are-you-ok skill (Windows)
 # Usage: status-check.ps1 [-EasterEgg]
 param([switch]$EasterEgg, [switch]$NetworkCheck)
 
@@ -100,19 +100,15 @@ if (Test-Path $claudeMd) {
     if ($brief) { Write-Output "claude_brief:$($brief.Trim())" }
 }
 
-# MEMORY - count only, content is for the agent to read directly
-$memoryRoot = Join-Path $env:USERPROFILE ".claude\projects"
-if (Test-Path $memoryRoot) {
-    $memFile = Get-ChildItem -Path $memoryRoot -Recurse -Depth 5 -Filter "MEMORY.md" -ErrorAction SilentlyContinue | Select-Object -First 1
+# MEMORY - count only; omit entirely when not found (agent skips the memory line)
+$claudeRoot = Join-Path $env:USERPROFILE ".claude"
+if (Test-Path $claudeRoot) {
+    $memFile = Get-ChildItem -Path $claudeRoot -Recurse -Depth 6 -Filter "MEMORY.md" -ErrorAction SilentlyContinue | Select-Object -First 1
     if ($memFile) {
         $entryCount = (Select-String -Path $memFile.FullName -Pattern "^- \[").Count
         Write-Output "memory_path:$($memFile.FullName)"
         Write-Output "memory_count:$entryCount"
-    } else {
-        Write-Output "memory_count:0"
     }
-} else {
-    Write-Output "memory_count:0"
 }
 
 exit 0

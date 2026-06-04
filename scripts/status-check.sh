@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+﻿#!/usr/bin/env bash
 # status-check.sh - Layer 3 data collector for the are-you-ok skill (Mac/Linux)
 # Usage: status-check.sh [--easter-egg]
 
@@ -70,14 +70,12 @@ if [ -f "$cwd/CLAUDE.md" ]; then
   [ -n "$brief" ] && echo "claude_brief:$brief"
 fi
 
-# MEMORY - count only
-mem_file=$(find "$HOME/.claude/projects" -maxdepth 6 -name "MEMORY.md" 2>/dev/null | head -1)
+# MEMORY - count only; omit entirely when not found (agent skips the memory line)
+mem_file=$(find "$HOME/.claude" -maxdepth 6 -name "MEMORY.md" 2>/dev/null | head -1)
 if [ -n "$mem_file" ]; then
   count=$(grep -c "^- \[" "$mem_file" 2>/dev/null || echo 0)
   echo "memory_path:$mem_file"
   echo "memory_count:$count"
-else
-  echo "memory_count:0"
 fi
 
 exit 0
