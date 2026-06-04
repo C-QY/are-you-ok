@@ -1,4 +1,4 @@
-# are-you-ok
+﻿# are-you-ok
 
 > A lightweight skill for users and supervisor agents to instantly check any AI agent's current state or an active project's progress.
 
@@ -111,18 +111,33 @@ Triggers **automatically** when network error signals appear in the conversation
 
 ## Installation
 
-```
-~/.claude/skills/are-you-ok/
-  SKILL.md
-  scripts/
-    status-check.ps1   ← Windows
-    status-check.sh    ← Mac / Linux
+**Windows (PowerShell):**
+```powershell
+irm https://raw.githubusercontent.com/C-QY/are-you-ok/master/install.ps1 | iex
 ```
 
-**Mac / Linux — one extra step:**
+**Mac / Linux:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/C-QY/are-you-ok/master/install.sh | bash
+```
+
+Restart Claude Code after installing, then say `are you ok`.
+
+<details>
+<summary>Manual install</summary>
+
+```
+git clone https://github.com/C-QY/are-you-ok
+```
+Copy the `are-you-ok/` folder to:
+```
+~/.claude/skills/are-you-ok/
+```
+Mac / Linux — one extra step:
 ```bash
 chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
 ```
+</details>
 
 ---
 

@@ -1,4 +1,4 @@
-# are-you-ok
+﻿# are-you-ok
 
 > 专为用户和监管 Agent 设计的轻量 Skill，可快速查看任意 AI Agent 的当前状态，或正在开发项目的进度与变更。
 
@@ -111,18 +111,33 @@ Agent 调用：`!status` 或 `{"skill":"are-you-ok","mode":"agent|project"}`
 
 ## 安装
 
-```
-~/.claude/skills/are-you-ok/
-  SKILL.md
-  scripts/
-    status-check.ps1   ← Windows
-    status-check.sh    ← Mac / Linux
+**Windows（PowerShell）：**
+```powershell
+irm https://raw.githubusercontent.com/C-QY/are-you-ok/master/install.ps1 | iex
 ```
 
-**Mac / Linux 额外步骤：**
+**Mac / Linux：**
+```bash
+curl -fsSL https://raw.githubusercontent.com/C-QY/are-you-ok/master/install.sh | bash
+```
+
+安装完成后重启 Claude Code，说 `are you ok` 即可触发。
+
+<details>
+<summary>手动安装</summary>
+
+```
+git clone https://github.com/C-QY/are-you-ok
+```
+将 `are-you-ok/` 整个文件夹复制到：
+```
+~/.claude/skills/are-you-ok/
+```
+Mac / Linux 额外执行：
 ```bash
 chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
 ```
+</details>
 
 ---
 
