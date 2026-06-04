@@ -1,4 +1,4 @@
-﻿---
+---
 name: are-you-ok
 description: >-
   Print a structured status snapshot of the current agent session or active project.
@@ -217,6 +217,7 @@ Omit empty detail blocks entirely.
 - Cap memory entries at 10; append `(+N more)` if exceeded
 - Cap recent commits at 3; cap recent changes at 10
 - Truncate any value line exceeding 50 chars with `…`
+- **CJK-aware padding**: Box inner width = 54 visual columns. For each content line, count CJK characters (Chinese, Japanese, Korean + full-width punctuation such as （）【】、。，；：！？——…·) and subtract that count from the trailing space padding. Formula: padding = (54 - char_count - CJK_char_count) spaces. This compensates for CJK chars occupying 2 display columns.
 - Agent caller: replace top border label with caller identity
 - git not a repo: CN `非代码仓库` / EN `not a repo`
 - memory not found (no `memory_count` in script output): omit 记忆 / memory line entirely
