@@ -31,6 +31,8 @@ if ($EasterEgg) {
 
 $cwd = (Get-Location).Path
 
+Write-Output "timestamp:$(Get-Date -Format 'yyyy-MM-dd HH:mm')"
+
 # CWD
 Write-Output "cwd:$cwd"
 
@@ -112,3 +114,5 @@ if (Test-Path $memoryRoot) {
 } else {
     Write-Output "memory_count:0"
 }
+
+exit 0

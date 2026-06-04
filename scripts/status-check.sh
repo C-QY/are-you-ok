@@ -16,6 +16,8 @@ if [ "$1" = "--easter-egg" ]; then
   fi
 fi
 
+echo "timestamp:$(date '+%Y-%m-%d %H:%M')"
+
 cwd="$(pwd)"
 echo "cwd:$cwd"
 
@@ -77,3 +79,5 @@ if [ -n "$mem_file" ]; then
 else
   echo "memory_count:0"
 fi
+
+exit 0

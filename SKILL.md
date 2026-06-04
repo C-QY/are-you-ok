@@ -36,10 +36,12 @@ resources:
 - Mac/Linux: `scripts/status-check.sh` — add `--easter-egg` flag if trigger is `are you ok`
 - Recovery trigger: add `-NetworkCheck` flag (Windows) / `--network-check` flag (Mac/Linux)
 
-Do NOT read the script into context — execute it. Captures: cwd, project_name,
+Do NOT read the script into context — execute it. Captures: **timestamp**, cwd, project_name,
 project_type, git branch/tag/log×3/changes, claude_brief, memory count.
 With `-NetworkCheck`: also outputs `network_status:ok` or `network_status:fail`.
 With the easter egg flag, audio plays automatically in the background.
+
+Use the `timestamp:` value from script output for the status box — **no separate time call needed**.
 
 If the script returns `easter_egg:ok` (no audio file found), render this before the status box:
 
