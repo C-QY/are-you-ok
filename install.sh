@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env bash
+#!/usr/bin/env bash
 # are-you-ok skill installer for Mac / Linux
 # Usage: curl -fsSL https://raw.githubusercontent.com/C-QY/are-you-ok/master/install.sh | bash
 
