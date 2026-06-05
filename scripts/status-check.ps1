@@ -1,6 +1,6 @@
 ﻿# status-check.ps1 - Layer 3 data collector for the are-you-ok skill (Windows)
-# Usage: status-check.ps1 [-OkAudio]
-param([switch]$OkAudio, [switch]$NetworkCheck)
+# Usage: status-check.ps1 [-EasterEgg] [-AudioOnly -AudioClip <name>]
+param([switch]$EasterEgg, [switch]$NetworkCheck, [switch]$AudioOnly, [string]$AudioClip = "")
 
 # NETWORK CHECK - quick DNS probe, runs before data collection
 if ($NetworkCheck) {
@@ -12,26 +12,45 @@ if ($NetworkCheck) {
     }
 }
 
-# OK AUDIO - play audio first so it starts while data is collected
-if ($OkAudio) {
+# AUDIO - play clip first so it starts while data is collected
+$clipToPlay = ""
+if ($EasterEgg) { $clipToPlay = "are-you-ok" }
+if ($AudioClip -ne "") { $clipToPlay = $AudioClip }
+
+if ($clipToPlay -ne "") {
     $noAudio = Join-Path $PSScriptRoot "..\assets\.no-audio"
-    $mp3 = Join-Path $PSScriptRoot "..\assets\eleijun-are-you-ok.mp3"
-    $wav = Join-Path $PSScriptRoot "..\assets\eleijun-are-you-ok.wav"
+    $mp3 = Join-Path $PSScriptRoot "..\assets\eleijun-$clipToPlay.mp3"
+    $wav = Join-Path $PSScriptRoot "..\assets\eleijun-$clipToPlay.wav"
     if (Test-Path $noAudio) {
         # audio disabled by user
     } elseif (Test-Path $mp3) {
         $fullPath = (Resolve-Path $mp3).Path
         Start-Process powershell -WindowStyle Hidden -ArgumentList '-NoProfile', '-Command',
-            "Add-Type -AssemblyName PresentationCore; `$p = New-Object System.Windows.Media.MediaPlayer; `$p.Open([uri]::new('$fullPath')); `$p.Play(); Start-Sleep 15"
-        Write-Output 'ok_audio:playing'
+            "Add-Type -AssemblyName PresentationCore; `$p = New-Object System.Windows.Media.MediaPlayer; `$p.Open([uri]::new('$fullPath')); `$p.Play(); Start-Sleep 20"
+        Write-Output 'easter_egg:playing'
     } elseif (Test-Path $wav) {
         $fullPath = (Resolve-Path $wav).Path
         Start-Process powershell -WindowStyle Hidden -ArgumentList '-NoProfile', '-Command',
             "Add-Type -AssemblyName System.Windows.Forms; (New-Object System.Media.SoundPlayer '$fullPath').PlaySync()"
-        Write-Output 'ok_audio:playing'
+        Write-Output 'easter_egg:playing'
     } else {
-        Write-Output 'ok_audio:not_found'
+        Write-Output 'easter_egg:missing'
     }
+}
+
+# CITY DETECTION - quick IP lookup for easter egg attribution; default to Shanghai on failure
+$city = "Shanghai"
+try {
+    $geo = Invoke-RestMethod "http://ip-api.com/json/?fields=city" -TimeoutSec 3 -ErrorAction Stop
+    if ($geo.city) { $city = $geo.city }
+} catch {}
+Write-Output "city:$city"
+
+# AUDIO ONLY - pure easter egg triggers: return timestamp + clip name, skip data collection
+if ($AudioOnly) {
+    Write-Output "timestamp:$(Get-Date -Format 'yyyy-MM-dd HH:mm')"
+    Write-Output "audio_clip:$clipToPlay"
+    exit 0
 }
 
 $cwd = (Get-Location).Path
@@ -108,16 +127,10 @@ if (Test-Path $claudeMd) {
 # MEMORY - count only; omit entirely when not found (agent skips the memory line)
 $claudeRoot = Join-Path $env:USERPROFILE ".claude"
 if (Test-Path $claudeRoot) {
-    $encoded = $cwd -replace ':', '-' -replace '[/\\]', '-'
-    $projectMem = Join-Path $claudeRoot "projects\$encoded\memory\MEMORY.md"
-    $memPath = if (Test-Path $projectMem) {
-        $projectMem
-    } else {
-        (Get-ChildItem -Path $claudeRoot -Recurse -Depth 6 -Filter "MEMORY.md" -ErrorAction SilentlyContinue | Select-Object -First 1).FullName
-    }
-    if ($memPath) {
-        $entryCount = (Select-String -Path $memPath -Pattern "^- \[").Count
-        Write-Output "memory_path:$memPath"
+    $memFile = Get-ChildItem -Path $claudeRoot -Recurse -Depth 6 -Filter "MEMORY.md" -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($memFile) {
+        $entryCount = (Select-String -Path $memFile.FullName -Pattern "^- \[").Count
+        Write-Output "memory_path:$($memFile.FullName)"
         Write-Output "memory_count:$entryCount"
     }
 }

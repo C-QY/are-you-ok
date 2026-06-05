@@ -1,6 +1,6 @@
 # are-you-ok
 
-> 专为 Claude Code 设计的轻量状态 Skill — 一句话查看 Agent 进度，网络中断后自动恢复上下文。
+> 专为 Claude Code 设计的轻量状态 Skill — 一句话查看 Agent 进度，网络中断后自动恢复上下文，还有隐藏语音彩蛋 🎤
 
 [![LINUX DO](https://img.shields.io/badge/LINUX_DO-社区讨论-blue?logo=discourse&logoColor=white)](https://linux.do/u/zzzz/activity)
 
@@ -60,6 +60,8 @@ chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
 | **项目进度** | `项目进度` · `项目状态` · `项目情况` · `汇报项目` | 查看项目名、版本、提交、变更文件 |
 | **快速一瞥** | `?` · `??` · `???` | 先回答问题，末尾追加状态摘要 |
 | **网络恢复** | 自动触发（无需输入） | 检测断网信号，输出恢复步骤 |
+| **语音彩蛋** | `hello` · `thank you` · `thank you very much` | 静默播放音频片段 |
+| **超级彩蛋** | 同一条消息包含 `are you ok` + `hello` + `thank you` + `thank you very much` | 播放完整18秒音频 + 显示状态框 |
 
 Agent 程序化调用：`!status` 或 `{"skill":"are-you-ok","mode":"agent|project"}`
 
@@ -165,33 +167,38 @@ Agent 程序化调用：`!status` 或 `{"skill":"are-you-ok","mode":"agent|proje
 
 ---
 
-## OK 音频
+## 语音彩蛋
 
-触发词恰好是 `are you ok`（大小写不限）时触发，其他状态词不触发。状态框在音频启动后立即输出，互不阻塞。
+五个触发词各对应一个音频片段，全部**静默后台播放**，不弹出任何播放器窗口。
 
+| 触发词 | 音频文件 | 时长 | 效果 |
+|------|---------|------|------|
+| `are you ok` | `eleijun-are-you-ok.mp3` | ~2s | 播放 + 显示状态框 |
+| `hello` | `eleijun-hello.mp3` | ~1.5s | 仅播放 + 文字彩蛋 |
+| `thank you` | `eleijun-thank-you.mp3` | ~1.4s | 仅播放 + 文字彩蛋 |
+| `thank you very much` | `eleijun-thank-you-very-much.mp3` | ~2s | 仅播放 + 文字彩蛋 |
+| 以上四个触发词同时输入 | `eleijun-super.mp3` | ~18s | 完整音频 + 状态框 |
+
+触发时输出文字彩蛋框（以 `are you ok` 为例）：
 ```
 ╭──────────────────────────────────╮
-│  🎤  "Are you OK?"               │
-│      Lei Jun · Shanghai · 2015   │
+│        🎤  "Are you OK?"         │
+│              Friday              │
+│         Shanghai · 2015          │
 ╰──────────────────────────────────╯
 ```
-> 没有音频文件时自动降级为纯文字版，不影响正常使用。
+> 显示当天星期几和地理城市（IP 自动定位，无法定位时显示 Shanghai）。
 
-**启用音频：** 将 `eleijun-are-you-ok.mp3`（或 `.wav`）放入 `assets/` 文件夹，触发时自动播放。
-> B 站搜「雷军 are you ok」，截取约 3 秒片段保存即可。
+> 音频文件缺失时自动降级为纯文字版，不影响正常使用。
 
-| 文件 | 效果 |
-|------|------|
-| `assets/eleijun-are-you-ok.mp3` | 播放音频（优先） |
-| `assets/eleijun-are-you-ok.wav` | 播放音频（备选格式） |
+**启用音频：** 将对应 `.mp3`（或 `.wav`）文件放入 `assets/` 文件夹，触发时自动播放。
+> 素材来源：搜「雷军 are you ok」，按各短语截取片段；建议以 64kbps 单声道编码压缩体积。
 
-**关闭音频：** 在 `assets/` 目录下创建空文件 `.no-audio`，触发时静默跳过，不影响状态框输出。
+**关闭所有音频：** 在 `assets/` 目录下创建空文件 `.no-audio`，静默跳过，不影响状态框输出。
 
 ```bash
 touch ~/.claude/skills/are-you-ok/assets/.no-audio
 ```
-
-**完全移除 OK 音频功能：** 删除 `scripts/play-ok-audio.ps1` 和 `scripts/play-ok-audio.sh`。
 
 ---
 

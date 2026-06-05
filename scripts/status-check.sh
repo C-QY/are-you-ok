@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # status-check.sh - Layer 3 data collector for the are-you-ok skill (Mac/Linux)
-# Usage: status-check.sh [--ok-audio] [--network-check]
-# Both flags can be passed simultaneously; each is handled by an independent loop.
+# Usage: status-check.sh [--easter-egg] [--audio-only --audio-clip <name>] [--network-check]
 
 # NETWORK CHECK - quick DNS probe, runs before data collection
 for arg in "$@"; do
@@ -15,32 +14,58 @@ for arg in "$@"; do
   fi
 done
 
-# OK AUDIO - play audio first so it starts while data is collected
-for arg in "$@"; do
-  if [ "$arg" = "--ok-audio" ]; then
-    assets_dir="$(dirname "$0")/../assets"
-    mp3="$assets_dir/eleijun-are-you-ok.mp3"
-    if [ -f "$assets_dir/.no-audio" ]; then
-      : # audio disabled by user
-    elif [ -f "$mp3" ]; then
-      if command -v afplay &>/dev/null; then
-        afplay "$mp3" &
-        echo "ok_audio:playing"
-      elif command -v mpg123 &>/dev/null; then
-        mpg123 -q "$mp3" &
-        echo "ok_audio:playing"
-      elif command -v ffplay &>/dev/null; then
-        ffplay -nodisp -autoexit -loglevel quiet "$mp3" &
-        echo "ok_audio:playing"
-      else
-        echo "ok_audio:not_found"
-      fi
-    else
-      echo "ok_audio:not_found"
-    fi
-    break
+# AUDIO - determine clip and play
+clip_to_play=""
+audio_only=false
+i=1
+while [ $i -le $# ]; do
+  arg="${!i}"
+  if [ "$arg" = "--easter-egg" ]; then clip_to_play="are-you-ok"
+  elif [ "$arg" = "--audio-only" ]; then audio_only=true
+  elif [ "$arg" = "--audio-clip" ]; then i=$((i+1)); clip_to_play="${!i}"
   fi
+  i=$((i+1))
 done
+
+if [ -n "$clip_to_play" ]; then
+  assets="$(dirname "$0")/../assets"
+  mp3="$assets/eleijun-$clip_to_play.mp3"
+  wav="$assets/eleijun-$clip_to_play.wav"
+  played=false
+  if [ -f "$assets/.no-audio" ]; then
+    : # audio disabled by user
+  elif [ -f "$mp3" ]; then
+    if command -v afplay &>/dev/null;   then afplay "$mp3" & played=true
+    elif command -v mpg123 &>/dev/null; then mpg123 -q "$mp3" & played=true
+    elif command -v ffplay &>/dev/null; then ffplay -nodisp -autoexit -loglevel quiet "$mp3" & played=true
+    fi
+  elif [ -f "$wav" ]; then
+    if command -v afplay &>/dev/null;   then afplay "$wav" & played=true
+    elif command -v aplay &>/dev/null;  then aplay -q "$wav" & played=true
+    fi
+  fi
+  if [ "$played" = true ]; then
+    echo "easter_egg:playing"
+  else
+    echo "easter_egg:missing"
+  fi
+fi
+
+# CITY DETECTION - IP lookup for easter egg attribution; default Shanghai on failure
+city="Shanghai"
+if command -v curl &>/dev/null; then
+  city_resp=$(curl -s --max-time 3 "http://ip-api.com/json/?fields=city" 2>/dev/null)
+  city_val=$(echo "$city_resp" | grep -o '"city":"[^"]*"' | sed 's/"city":"//;s/"//')
+  [ -n "$city_val" ] && city="$city_val"
+fi
+echo "city:$city"
+
+# AUDIO ONLY - pure easter egg triggers: return timestamp + clip name, skip data collection
+if [ "$audio_only" = true ]; then
+  echo "timestamp:$(date '+%Y-%m-%d %H:%M')"
+  echo "audio_clip:$clip_to_play"
+  exit 0
+fi
 
 echo "timestamp:$(date '+%Y-%m-%d %H:%M')"
 
@@ -96,20 +121,12 @@ if [ -f "$cwd/CLAUDE.md" ]; then
   [ -n "$brief" ] && echo "claude_brief:$brief"
 fi
 
-# MEMORY - Claude Code only (~/.claude must exist); omit entirely in other environments
-if [ -d "$HOME/.claude" ]; then
-  encoded=$(pwd | sed 's/://g' | sed 's|[/\\]|-|g')
-  project_mem="$HOME/.claude/projects/$encoded/memory/MEMORY.md"
-  if [ -f "$project_mem" ]; then
-    mem_file="$project_mem"
-  else
-    mem_file=$(find "$HOME/.claude" -maxdepth 6 -name "MEMORY.md" 2>/dev/null | head -1)
-  fi
-  if [ -n "$mem_file" ]; then
-    count=$(grep -c "^- \[" "$mem_file" 2>/dev/null || echo 0)
-    echo "memory_path:$mem_file"
-    echo "memory_count:$count"
-  fi
+# MEMORY - count only; omit entirely when not found (agent skips the memory line)
+mem_file=$(find "$HOME/.claude" -maxdepth 6 -name "MEMORY.md" 2>/dev/null | head -1)
+if [ -n "$mem_file" ]; then
+  count=$(grep -c "^- \[" "$mem_file" 2>/dev/null || echo 0)
+  echo "memory_path:$mem_file"
+  echo "memory_count:$count"
 fi
 
 exit 0

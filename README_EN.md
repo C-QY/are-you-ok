@@ -1,6 +1,6 @@
 # are-you-ok
 
-> A lightweight status skill for Claude Code — check agent progress in one phrase, and automatically recover context after a network drop.
+> A lightweight status skill for Claude Code — check agent progress in one phrase, automatically recover context after a network drop, and hidden audio easter eggs 🎤
 
 [![LINUX DO](https://img.shields.io/badge/LINUX_DO-Community-blue?logo=discourse&logoColor=white)](https://linux.do/u/zzzz/activity)
 
@@ -60,6 +60,8 @@ During long Claude Code sessions, you might run into:
 | **Project Status** | `project status` · `project progress` · `show project` | Name, version, commits, changed files |
 | **Inline Peek** | `?` · `??` · `???` | Answers first, appends status summary at the end |
 | **Network Recovery** | Auto-triggered — no input needed | Detects network error signals, outputs recovery steps |
+| **Easter Egg** | `hello` · `thank you` · `thank you very much` | Silent audio playback + easter egg box |
+| **Super Easter Egg** | `are you ok` + `hello` + `thank you` + `thank you very much` in one message | Full 18-second audio + status box |
 
 Programmatic call: `!status` or `{"skill":"are-you-ok","mode":"agent|project"}`
 
@@ -165,33 +167,38 @@ This is `are-you-ok`'s most unique feature. When network error signals appear in
 
 ---
 
-## OK Audio
+## Easter Egg Audio
 
-Triggers only on the exact phrase `are you ok` (case-insensitive). Other trigger phrases do not activate it. The status box outputs immediately after audio starts — they don't block each other.
+Five trigger phrases each map to a short audio clip, all played **silently in the background** — no player window ever pops up.
 
+| Trigger | Audio file | Duration | Effect |
+|---------|-----------|----------|--------|
+| `are you ok` | `eleijun-are-you-ok.mp3` | ~2s | Plays + status box |
+| `hello` | `eleijun-hello.mp3` | ~1.5s | Plays + easter egg box |
+| `thank you` | `eleijun-thank-you.mp3` | ~1.4s | Plays + easter egg box |
+| `thank you very much` | `eleijun-thank-you-very-much.mp3` | ~2s | Plays + easter egg box |
+| All four triggers in one message | `eleijun-super.mp3` | ~18s | Full audio + status box |
+
+Easter egg box shown on trigger (example for `are you ok`):
 ```
 ╭──────────────────────────────────╮
-│  🎤  "Are you OK?"               │
-│      Lei Jun · Shanghai · 2015   │
+│        🎤  "Are you OK?"         │
+│              Friday              │
+│         Shanghai · 2015          │
 ╰──────────────────────────────────╯
 ```
+> Shows the current weekday and your location city (auto-detected by IP; falls back to Shanghai).
+
 > Falls back to text-only when no audio file is present — the skill works normally either way.
 
-**Enable audio:** Place `eleijun-are-you-ok.mp3` (or `.wav`) in the `assets/` folder. It plays automatically on trigger.
-> Search "雷军 are you ok" on Bilibili or YouTube, trim to ~3 seconds, save as `eleijun-are-you-ok.mp3`.
+**Enable audio:** Place the corresponding `.mp3` (or `.wav`) files in the `assets/` folder. They play automatically on trigger.
+> Source material: search "雷军 are you ok" and trim each phrase; encode at 64 kbps mono for a smaller footprint.
 
-| File | Effect |
-|------|--------|
-| `assets/eleijun-are-you-ok.mp3` | Plays audio (preferred) |
-| `assets/eleijun-are-you-ok.wav` | Plays audio (fallback format) |
-
-**Disable audio:** Create an empty `.no-audio` file in the `assets/` directory. Audio is silently skipped; the status box still outputs normally.
+**Disable all audio:** Create an empty `.no-audio` file in the `assets/` directory. Audio is silently skipped; the easter egg boxes still appear.
 
 ```bash
 touch ~/.claude/skills/are-you-ok/assets/.no-audio
 ```
-
-**Fully remove OK audio:** Delete `scripts/play-ok-audio.ps1` and `scripts/play-ok-audio.sh`.
 
 ---
 
