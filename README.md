@@ -2,7 +2,7 @@
 
 > 专为 Claude Code 设计的轻量状态 Skill — 一句话查看 Agent 进度，网络中断后自动恢复上下文。
 
-[![LINUX DO](https://img.shields.io/badge/LINUX_DO-社区讨论-blue?logo=discourse&logoColor=white)](https://linux.do/t/topic/1777230)
+[![LINUX DO](https://img.shields.io/badge/LINUX_DO-社区讨论-blue?logo=discourse&logoColor=white)](https://linux.do/u/zzzz/activity)
 
 **[English →](README_EN.md)**
 

@@ -2,7 +2,7 @@
 
 > A lightweight status skill for Claude Code — check agent progress in one phrase, and automatically recover context after a network drop.
 
-[![LINUX DO](https://img.shields.io/badge/LINUX_DO-Community-blue?logo=discourse&logoColor=white)](https://linux.do/t/topic/1777230)
+[![LINUX DO](https://img.shields.io/badge/LINUX_DO-Community-blue?logo=discourse&logoColor=white)](https://linux.do/u/zzzz/activity)
 
 **[中文 →](README.md)**
 
