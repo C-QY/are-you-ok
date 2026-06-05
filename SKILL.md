@@ -30,8 +30,6 @@ resources:
   - scripts/status-check.sh
   - assets/eleijun-are-you-ok.mp3
   - assets/eleijun-hello.mp3
-  - assets/eleijun-thank-you.mp3
-  - assets/eleijun-thank-you-very-much.mp3
   - assets/eleijun-super.mp3
 ---
 
@@ -39,7 +37,7 @@ resources:
 
 **Step 1 — Run the data collection script**
 
-- Windows: `scripts/status-check.ps1` — use `-EasterEgg` for `are you ok`; `-AudioOnly -AudioClip <name>` for easter egg triggers: `hello`→`hello`, `thank you`→`thank-you`, `thank you very much`→`thank-you-very-much`; `-AudioClip super -EasterEgg` for super easter egg (plays full 18s speech, then collects data normally)
+- Windows: `scripts/status-check.ps1` — use `-EasterEgg` for `are you ok`; `-AudioOnly -AudioClip hello` for all three easter egg triggers (`hello`, `thank you`, `thank you very much` all use same clip); `-AudioClip super` for super easter egg (plays full 18s speech, then collects data normally)
 - Mac/Linux: `scripts/status-check.sh` — same flags with `--` prefix (`--easter-egg`, `--audio-only`, `--audio-clip`)
 - Recovery trigger: add `-NetworkCheck` flag (Windows) / `--network-check` flag (Mac/Linux)
 
@@ -63,28 +61,11 @@ For super easter egg: render the super box when `easter_egg:playing` OR `easter_
 ╰──────────────────────────────────╯
 ```
 
-"hello":
+"hello" / "thank you" / "thank you very much":
 ```
 ╭──────────────────────────────────╮
-│           🎤  "Hello~"           │
-│            {weekday}             │
-│         {city} · 2015            │
-╰──────────────────────────────────╯
-```
-
-"thank you":
-```
-╭──────────────────────────────────╮
-│         🎤  "Thank you~"         │
-│            {weekday}             │
-│         {city} · 2015            │
-╰──────────────────────────────────╯
-```
-
-"thank you very much":
-```
-╭──────────────────────────────────╮
-│    🎤  "Thank you very much!"    │
+│     🎤  "Hello~ Thank you~"      │
+│      "Thank you very much!"      │
 │            {weekday}             │
 │         {city} · 2015            │
 ╰──────────────────────────────────╯

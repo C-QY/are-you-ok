@@ -60,7 +60,7 @@ chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
 | **项目进度** | `项目进度` · `项目状态` · `项目情况` · `汇报项目` | 查看项目名、版本、提交、变更文件 |
 | **快速一瞥** | `?` · `??` · `???` | 先回答问题，末尾追加状态摘要 |
 | **网络恢复** | 自动触发（无需输入） | 检测断网信号，输出恢复步骤 |
-| **语音彩蛋** | `hello` · `thank you` · `thank you very much` | 静默播放音频片段 |
+| **语音彩蛋** | `hello` · `thank you` · `thank you very much` | 静默播放音频 + 文字彩蛋 |
 | **超级彩蛋** | 同一条消息包含 `are you ok` + `hello` + `thank you` + `thank you very much` | 播放完整18秒音频 + 显示状态框 |
 
 Agent 程序化调用：`!status` 或 `{"skill":"are-you-ok","mode":"agent|project"}`
@@ -169,20 +169,19 @@ Agent 程序化调用：`!status` 或 `{"skill":"are-you-ok","mode":"agent|proje
 
 ## 语音彩蛋
 
-五个触发词各对应一个音频片段，全部**静默后台播放**，不弹出任何播放器窗口。
+全部**静默后台播放**，不弹出任何播放器窗口。
 
 | 触发词 | 音频文件 | 时长 | 效果 |
 |------|---------|------|------|
 | `are you ok` | `eleijun-are-you-ok.mp3` | ~2s | 播放 + 显示状态框 |
-| `hello` | `eleijun-hello.mp3` | ~1.5s | 仅播放 + 文字彩蛋 |
-| `thank you` | `eleijun-thank-you.mp3` | ~1.4s | 仅播放 + 文字彩蛋 |
-| `thank you very much` | `eleijun-thank-you-very-much.mp3` | ~2s | 仅播放 + 文字彩蛋 |
-| 以上四个触发词同时输入 | `eleijun-super.mp3` | ~18s | 完整音频 + 状态框 |
+| `hello` · `thank you` · `thank you very much` | `eleijun-hello.mp3` | ~3.7s | 播放 + 文字彩蛋 |
+| 四词同时输入 | `eleijun-super.mp3` | ~18s | 完整音频 + 状态框 |
 
-触发时输出文字彩蛋框（以 `are you ok` 为例）：
+三个触发词播放同一段音频（Hello~ Thank you~ Thank you very much!），触发时显示：
 ```
 ╭──────────────────────────────────╮
-│        🎤  "Are you OK?"         │
+│     🎤  "Hello~ Thank you~"      │
+│      "Thank you very much!"      │
 │              Friday              │
 │         Shanghai · 2015          │
 ╰──────────────────────────────────╯
@@ -191,8 +190,8 @@ Agent 程序化调用：`!status` 或 `{"skill":"are-you-ok","mode":"agent|proje
 
 > 音频文件缺失时自动降级为纯文字版，不影响正常使用。
 
-**启用音频：** 将对应 `.mp3`（或 `.wav`）文件放入 `assets/` 文件夹，触发时自动播放。
-> 素材来源：搜「雷军 are you ok」，按各短语截取片段；建议以 64kbps 单声道编码压缩体积。
+**启用音频：** 将 `.mp3`（或 `.wav`）文件放入 `assets/` 文件夹，触发时自动播放。
+> 素材来源：搜「雷军 are you ok」截取对应片段，建议 64kbps 单声道编码。
 
 **关闭所有音频：** 在 `assets/` 目录下创建空文件 `.no-audio`，静默跳过，不影响状态框输出。
 

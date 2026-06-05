@@ -169,20 +169,19 @@ This is `are-you-ok`'s most unique feature. When network error signals appear in
 
 ## Easter Egg Audio
 
-Five trigger phrases each map to a short audio clip, all played **silently in the background** — no player window ever pops up.
+All clips play **silently in the background** — no player window ever pops up.
 
 | Trigger | Audio file | Duration | Effect |
 |---------|-----------|----------|--------|
 | `are you ok` | `eleijun-are-you-ok.mp3` | ~2s | Plays + status box |
-| `hello` | `eleijun-hello.mp3` | ~1.5s | Plays + easter egg box |
-| `thank you` | `eleijun-thank-you.mp3` | ~1.4s | Plays + easter egg box |
-| `thank you very much` | `eleijun-thank-you-very-much.mp3` | ~2s | Plays + easter egg box |
+| `hello` · `thank you` · `thank you very much` | `eleijun-hello.mp3` | ~3.7s | Plays + easter egg box |
 | All four triggers in one message | `eleijun-super.mp3` | ~18s | Full audio + status box |
 
-Easter egg box shown on trigger (example for `are you ok`):
+All three triggers play the same clip ("Hello~ Thank you~ Thank you very much!") and show:
 ```
 ╭──────────────────────────────────╮
-│        🎤  "Are you OK?"         │
+│     🎤  "Hello~ Thank you~"      │
+│      "Thank you very much!"      │
 │              Friday              │
 │         Shanghai · 2015          │
 ╰──────────────────────────────────╯
@@ -191,8 +190,8 @@ Easter egg box shown on trigger (example for `are you ok`):
 
 > Falls back to text-only when no audio file is present — the skill works normally either way.
 
-**Enable audio:** Place the corresponding `.mp3` (or `.wav`) files in the `assets/` folder. They play automatically on trigger.
-> Source material: search "雷军 are you ok" and trim each phrase; encode at 64 kbps mono for a smaller footprint.
+**Enable audio:** Place the `.mp3` (or `.wav`) files in the `assets/` folder. They play automatically on trigger.
+> Source material: search "雷军 are you ok" and trim the phrases; encode at 64 kbps mono.
 
 **Disable all audio:** Create an empty `.no-audio` file in the `assets/` directory. Audio is silently skipped; the easter egg boxes still appear.
 
