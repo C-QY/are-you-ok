@@ -6,17 +6,20 @@ set -e
 
 REPO="https://github.com/C-QY/are-you-ok"
 DEST="$HOME/.claude/skills/are-you-ok"
-TMP="$(mktemp -d)/are-you-ok"
-
-git clone "$REPO" "$TMP"
 
 mkdir -p "$(dirname "$DEST")"
-rm -rf "$DEST"
-cp -r "$TMP" "$DEST"
-chmod +x "$DEST/scripts/status-check.sh"
-rm -rf "$(dirname "$TMP")"
 
-echo ""
-echo "  are-you-ok installed."
+if [ -d "$DEST/.git" ]; then
+    cd "$DEST" && git pull
+    echo ""
+    echo "  are-you-ok updated."
+else
+    [ -d "$DEST" ] && rm -rf "$DEST"
+    git clone "$REPO" "$DEST"
+    chmod +x "$DEST/scripts/status-check.sh"
+    echo ""
+    echo "  are-you-ok installed."
+fi
+
 echo "  Restart Claude Code, then say 'are you ok'."
 echo ""

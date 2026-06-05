@@ -183,7 +183,11 @@ Agent 程序化调用：`!status` 或 `{"skill":"are-you-ok","mode":"agent|proje
 
 没有媒体文件时自动降级为纯文字版彩蛋，不影响正常使用。
 
-**完全关闭彩蛋：** 删除 `scripts/play-easter-egg.ps1` 和 `scripts/play-easter-egg.sh`。
+**静默关闭音频：** 在 `~/.claude/skills/are-you-ok/` 目录下创建 `.no-audio` 空文件，音频静默跳过，文字彩蛋和状态框正常输出。
+
+```bash
+touch ~/.claude/skills/are-you-ok/.no-audio
+```
 
 ---
 

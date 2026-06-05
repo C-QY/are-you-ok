@@ -183,7 +183,11 @@ Triggers only on the exact phrase `are you ok` (case-insensitive). Other trigger
 
 If no media files are present, a text-only Easter egg is shown — the skill works normally either way.
 
-**Fully disable:** Delete `scripts/play-easter-egg.ps1` and `scripts/play-easter-egg.sh`.
+**Silence audio:** Create an empty `.no-audio` file in `~/.claude/skills/are-you-ok/`. Audio is skipped silently; the text easter egg and status box still appear normally.
+
+```bash
+touch ~/.claude/skills/are-you-ok/.no-audio
+```
 
 ---
 
