@@ -183,9 +183,10 @@ All three triggers play the same clip ("Hello~ Thank you~ Thank you very much!")
 │     🎤  "Hello~ Thank you~"      │
 │      "Thank you very much!"      │
 │              Friday              │
+│           2026-06-06             │
 ╰──────────────────────────────────╯
 ```
-> Shows the current weekday.
+> Shows the current weekday and date.
 
 > Falls back to text-only when no audio file is present — the skill works normally either way.
 

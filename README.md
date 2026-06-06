@@ -183,9 +183,10 @@ Agent 程序化调用：`!status` 或 `{"skill":"are-you-ok","mode":"agent|proje
 │     🎤  "Hello~ Thank you~"      │
 │      "Thank you very much!"      │
 │              Friday              │
+│           2026-06-06             │
 ╰──────────────────────────────────╯
 ```
-> 显示当天星期几。
+> 显示当天星期几和日期。
 
 > 音频文件缺失时自动降级为纯文字版，不影响正常使用。
 

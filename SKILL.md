@@ -57,6 +57,7 @@ For super easter egg: render the super box when `easter_egg:playing` OR `easter_
 ╭──────────────────────────────────╮
 │        🎤  "Are you OK?"         │
 │            {weekday}             │
+│           {YYYY-MM-DD}           │
 ╰──────────────────────────────────╯
 ```
 
@@ -66,6 +67,7 @@ For super easter egg: render the super box when `easter_egg:playing` OR `easter_
 │     🎤  "Hello~ Thank you~"      │
 │      "Thank you very much!"      │
 │            {weekday}             │
+│           {YYYY-MM-DD}           │
 ╰──────────────────────────────────╯
 ```
 
@@ -76,6 +78,7 @@ super easter egg (all 4 phrases in one message):
 │             Hello~, Thank you~             │
 │            Thank you very much!            │
 │                  {weekday}                 │
+│               {YYYY-MM-DD}                │
 ╰────────────────────────────────────────────╯
 ```
 
