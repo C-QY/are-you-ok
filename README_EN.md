@@ -1,77 +1,28 @@
 # are-you-ok
 
-> Lightweight agent status skill — check progress, auto-recover context after network drops, and Lei Jun sings 🎤
-
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![LINUX DO](https://img.shields.io/badge/LINUX_DO-Community-blue?logo=discourse&logoColor=white)](https://linux.do/u/zzzz/activity)
+
+> Instant status snapshots for Claude Code — auto-recovers after network drops, and Lei Jun sings 🎤
 
 **[中文 →](README.md)**
 
 ---
 
-## Quick Install
+## ✨ What It Does
 
-**Windows (PowerShell):**
-```powershell
-irm https://raw.githubusercontent.com/C-QY/are-you-ok/master/install.ps1 | iex
-```
-
-**Mac / Linux:**
-```bash
-curl -fsSL https://raw.githubusercontent.com/C-QY/are-you-ok/master/install.sh | bash
-```
-
-Restart Claude Code after installing, then say `are you ok`.
-
-<details>
-<summary>Manual install</summary>
-
-```bash
-git clone https://github.com/C-QY/are-you-ok
-```
-Copy the `are-you-ok/` folder to:
-```
-~/.claude/skills/are-you-ok/
-```
-Mac / Linux — one extra step:
-```bash
-chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
-```
-</details>
+👌 Say `are you ok` — instant snapshot of model, tasks, git, and memory  
+🔄 Auto-recovers from network drops — detects error signals and guides you back, no input needed  
+⚡ Inline peek — append a status summary to any response with `?`, without breaking your flow  
+🎵 Easter egg built in — say `雷总唱歌给我听` and Lei Jun plays silently in the background  
 
 ---
 
-## What Problem Does It Solve
-
-During long Claude Code sessions, you might run into:
-
-- Not knowing what step the agent is currently on
-- Network drops that make the agent lose track of where it was
-- Wanting a quick snapshot of git state, task list, and memory without interrupting the flow
-
-`are-you-ok` delivers a full status snapshot in one phrase, and **automatically** guides the agent back on track after a network interruption.
-
----
-
-## Four Modes
-
-| Mode | Trigger | What it shows |
-|------|---------|---------------|
-| **Agent Status** | `are you ok` · `status check` · `report status` | Model, tools, tasks, memory |
-| **Project Status** | `project status` · `project progress` · `show project` | Name, version, commits, changed files |
-| **Inline Peek** | `?` · `??` · `???` | Answers first, appends status summary at the end |
-| **Network Recovery** | Auto-triggered — no input needed | Detects network error signals, outputs recovery steps |
-| **Easter Egg** | `hello` / `thank you` / `thank you very much` (any one triggers) | Silent audio playback + easter egg box |
-| **Super Easter Egg** | `雷总唱歌给我听` | Full 18-second audio + easter egg box |
-
-Programmatic call: `!status` or `{"skill":"are-you-ok","mode":"agent|project"}`
-
----
-
-## Sample Output
+## Preview
 
 **Agent mode** (`are you ok`):
 ```
-👌 STATUS ─── 2026-06-03 14:32
+👌  STATUS ─── 2026-06-06 14:32
 │
 │  agent    claude-sonnet-4-6
 │  cwd      ~/projects/my-app
@@ -92,7 +43,7 @@ Programmatic call: `!status` or `{"skill":"are-you-ok","mode":"agent|project"}`
 
 **Project mode** (`project status`):
 ```
-👌 PROJECT STATUS ─── 2026-06-03 14:32
+👌  PROJECT STATUS ─── 2026-06-06 14:32
 │
 │  project  my-app  [Node.js]
 │  version  v1.2.0
@@ -107,11 +58,8 @@ Programmatic call: `!status` or `{"skill":"are-you-ok","mode":"agent|project"}`
 ├─ RECENT COMMITS ───────────────────────────────
 │  a1b2c3d  feat: add user search
 │  e4f5g6h  fix: login redirect issue
-│  i7j8k9l  chore: upgrade dependencies
 ├─ ACTIVE ───────────────────────────────────────
 │  ●  implement pagination for the results list
-├─ PENDING ──────────────────────────────────────
-│  ○  update API documentation
 ├─ RECENT CHANGES ───────────────────────────────
 │  src/components/SearchBar.tsx
 ├─ MEMORY ───────────────────────────────────────
@@ -121,13 +69,84 @@ Programmatic call: `!status` or `{"skill":"are-you-ok","mode":"agent|project"}`
 
 ---
 
-## Network Recovery Mode
+## Quick Start
 
-This is `are-you-ok`'s most unique feature. When network error signals appear in the conversation context, it **auto-triggers** — no user input required — and immediately outputs a disconnect summary with recovery steps.
-
-**Sample network recovery output:**
+**Windows (PowerShell):**
+```powershell
+irm https://raw.githubusercontent.com/C-QY/are-you-ok/master/install.ps1 | iex
 ```
-👌 NETWORK RECOVERY ─── 2026-06-04 10:30
+
+**Mac / Linux:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/C-QY/are-you-ok/master/install.sh | bash
+```
+
+Restart Claude Code, then say `are you ok`. Run the same command again to update.
+
+<details>
+<summary>Manual install</summary>
+
+```bash
+git clone https://github.com/C-QY/are-you-ok ~/.claude/skills/are-you-ok
+chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh  # Mac/Linux
+```
+</details>
+
+---
+
+## Trigger Reference
+
+| Trigger | Mode | Output |
+|---------|------|--------|
+| `are you ok` · `status check` · `report status` | Agent status | Model, tasks, git, memory |
+| `project status` · `project progress` | Project status | Version, commits, changed files |
+| `?` · `??` · `???` | Inline peek | Answers first, appends status at end |
+| Network error signal (auto) | Network recovery | Disconnect summary + recovery steps |
+| `hello` / `thank you` / `thank you very much` | Easter egg | Silent audio + text box |
+| `雷总唱歌给我听` | Super easter egg | Full 18s audio + text box |
+
+Programmatic: `!status` or `{"skill":"are-you-ok","mode":"agent|project"}`
+
+---
+
+## Hidden Touches 🎵
+
+All audio plays silently in the background — no player window, no interruption.
+
+| Trigger | File | Duration |
+|---------|------|----------|
+| `are you ok` | `eleijun-are-you-ok.mp3` | ~2s |
+| `hello` / `thank you` / `thank you very much` (any one) | `eleijun-hello.mp3` | ~3.7s |
+| `雷总唱歌给我听` | `eleijun-super.mp3` | ~18s |
+
+On trigger:
+```
+╭──────────────────────────────────╮
+│     🎤  "Hello~ Thank you~"      │
+│      "Thank you very much!"      │
+│              Friday              │
+│           2026-06-06             │
+╰──────────────────────────────────╯
+```
+
+Audio files are not bundled (copyright) — drop them into `assets/` and they play automatically. Missing files fall back to text-only gracefully.
+
+> Source: search "雷军 are you ok" on Bilibili, trim the clips, encode at 64 kbps mono.
+
+**Silence audio:** Create an empty `.no-audio` file in `assets/` — audio skips silently, text boxes still show.
+
+```bash
+touch ~/.claude/skills/are-you-ok/assets/.no-audio
+```
+
+---
+
+## Network Recovery
+
+Auto-triggers when network error signals appear in context — no input needed:
+
+```
+👌  NETWORK RECOVERY ─── 2026-06-06 10:30
 │
 │  network  ✓ restored
 │  git      2Δ uncommitted  ·  "feat: add user search"
@@ -141,18 +160,19 @@ This is `are-you-ok`'s most unique feature. When network error signals appear in
 ╰────────────────────────────────────────────────
 ```
 
-**Recognized network error signals:**
+Detects signals from: Claude Code · ChatGPT · GitHub Copilot · Cursor · Gemini · universal signals (ECONNRESET / 502 / 503 etc.)
 
-| Tool | Detected signals |
-|------|-----------------|
-| Claude Code | `socket connection was closed unexpectedly` · `Streamable HTTP error` |
-| ChatGPT / OpenAI | `network error` · `Failed to fetch` · `The network connection was lost` |
-| GitHub Copilot | `Copilot is not reachable` · `Connection to GitHub Copilot failed` |
-| Cursor | `Could not connect to language model` |
-| Gemini | `UNAVAILABLE` · `deadline exceeded` · `transport error` |
-| Universal signals | `ECONNRESET` · `ETIMEDOUT` · `ENOTFOUND` · `502` · `503` |
+---
 
-**Does NOT trigger on:** user-initiated exits (no error signal), token limit errors, content policy rejections.
+## Design Principles
+
+**Fast · Lightweight · Universal** — scripts collect metadata only, never file content.
+
+| Layer | File | Token cost |
+|-------|------|-----------|
+| L1 | `SKILL.md` frontmatter | ~100 tokens |
+| L2 | `SKILL.md` body | Loaded on trigger |
+| L3 | `scripts/status-check.*` | Executed, not read — zero token cost |
 
 ---
 
@@ -164,49 +184,3 @@ This is `are-you-ok`'s most unique feature. When network error signals appear in
 | Mac | bash · afplay (built-in) |
 | Linux | bash · mpg123 or ffplay (optional, for audio) |
 | All platforms | `git` (optional) |
-
----
-
-## Easter Egg Audio
-
-All clips play **silently in the background** — no player window ever pops up.
-
-| Trigger | Audio file | Duration | Effect |
-|---------|-----------|----------|--------|
-| `are you ok` | `eleijun-are-you-ok.mp3` | ~2s | Plays + status box |
-| `hello` / `thank you` / `thank you very much` (any one triggers) | `eleijun-hello.mp3` | ~3.7s | Plays + easter egg box |
-| `雷总唱歌给我听` | `eleijun-super.mp3` | ~18s | Full audio + easter egg box |
-
-All three triggers play the same clip ("Hello~ Thank you~ Thank you very much!") and show:
-```
-╭──────────────────────────────────╮
-│     🎤  "Hello~ Thank you~"      │
-│      "Thank you very much!"      │
-│              Friday              │
-│           2026-06-06             │
-╰──────────────────────────────────╯
-```
-> Shows the current weekday and date.
-
-> Falls back to text-only when no audio file is present — the skill works normally either way.
-
-**Enable audio:** Place the `.mp3` (or `.wav`) files in the `assets/` folder. They play automatically on trigger.
-> Source material: search "雷军 are you ok" and trim the phrases; encode at 64 kbps mono.
-
-**Disable all audio:** Create an empty `.no-audio` file in the `assets/` directory. Audio is silently skipped; the easter egg boxes still appear.
-
-```bash
-touch ~/.claude/skills/are-you-ok/assets/.no-audio
-```
-
----
-
-## Design Principles
-
-**Fast · Lightweight · Universal** — scripts collect metadata only, never actual file content. Before any change, ask: does this add extra overhead?
-
-| Layer | File | Token cost |
-|-------|------|-----------|
-| L1 | `SKILL.md` frontmatter | ~100 tokens |
-| L2 | `SKILL.md` body | Loaded on trigger |
-| L3 | `scripts/status-check.*` | Executed, not read — zero token cost |
