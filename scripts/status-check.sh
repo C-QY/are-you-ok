@@ -52,7 +52,7 @@ if [ -n "$clip_to_play" ]; then
 fi
 
 # CITY DETECTION - IP lookup for easter egg attribution; default Shanghai on failure
-city="Shanghai"
+city="China"
 if command -v curl &>/dev/null; then
   city_resp=$(curl -s --max-time 3 "http://ip-api.com/json/?fields=city" 2>/dev/null)
   city_val=$(echo "$city_resp" | grep -o '"city":"[^"]*"' | sed 's/"city":"//;s/"//')

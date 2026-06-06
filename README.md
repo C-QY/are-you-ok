@@ -1,6 +1,6 @@
 # are-you-ok
 
-> 专为 Claude Code 设计的轻量状态 Skill — 一句话查看 Agent 进度，网络中断后自动恢复上下文，还有隐藏语音彩蛋 🎤
+> 轻量状态查看 Skill —— 检查 Agent 进度，网络中断后自动恢复 context，还有雷总唱歌 🎤
 
 [![LINUX DO](https://img.shields.io/badge/LINUX_DO-社区讨论-blue?logo=discourse&logoColor=white)](https://linux.do/u/zzzz/activity)
 
@@ -61,7 +61,7 @@ chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
 | **快速一瞥** | `?` · `??` · `???` | 先回答问题，末尾追加状态摘要 |
 | **网络恢复** | 自动触发（无需输入） | 检测断网信号，输出恢复步骤 |
 | **语音彩蛋** | `hello` · `thank you` · `thank you very much` | 静默播放音频 + 文字彩蛋 |
-| **超级彩蛋** | 同一条消息包含四词，或说 `雷总唱歌给我听` | 播放完整18秒音频 + 文字彩蛋 |
+| **超级彩蛋** | `雷总唱歌给我听` | 播放完整18秒音频 + 文字彩蛋 |
 
 Agent 程序化调用：`!status` 或 `{"skill":"are-you-ok","mode":"agent|project"}`
 
@@ -175,7 +175,7 @@ Agent 程序化调用：`!status` 或 `{"skill":"are-you-ok","mode":"agent|proje
 |------|---------|------|------|
 | `are you ok` | `eleijun-are-you-ok.mp3` | ~2s | 播放 + 显示状态框 |
 | `hello` · `thank you` · `thank you very much` | `eleijun-hello.mp3` | ~3.7s | 播放 + 文字彩蛋 |
-| 四词同时输入 / `雷总唱歌给我听` | `eleijun-super.mp3` | ~18s | 完整音频 + 文字彩蛋 |
+| `雷总唱歌给我听` | `eleijun-super.mp3` | ~18s | 完整音频 + 文字彩蛋 |
 
 三个触发词播放同一段音频（Hello~ Thank you~ Thank you very much!），触发时显示：
 ```
@@ -186,7 +186,7 @@ Agent 程序化调用：`!status` 或 `{"skill":"are-you-ok","mode":"agent|proje
 │         Shanghai · 2015          │
 ╰──────────────────────────────────╯
 ```
-> 显示当天星期几和地理城市（IP 自动定位，无法定位时显示 Shanghai）。
+> 显示当天星期几和地理城市（IP 自动定位，无法定位时显示 China）。
 
 > 音频文件缺失时自动降级为纯文字版，不影响正常使用。
 

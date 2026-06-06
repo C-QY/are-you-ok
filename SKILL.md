@@ -23,7 +23,6 @@ description: >-
   Do NOT auto-invoke for business errors (token limit, content policy, etc.).
   Output language: Chinese for CN triggers and "are you ok"; English otherwise.
   Trigger — easter egg: "hello", "thank you", "thank you very much" — play audio only, no status box.
-  Trigger — super easter egg: message contains ALL FOUR phrases ("are you ok" + "hello" + "thank you" + "thank you very much") — play full speech then show status box.
   Trigger — 雷总唱歌给我听: play full 18s super clip only, no status box. Use -AudioOnly -AudioClip super (Windows) / --audio-only --audio-clip super (Mac/Linux).
 allowed_tools: [PowerShell, Bash, Read, Glob]
 resources:
@@ -38,7 +37,7 @@ resources:
 
 **Step 1 — Run the data collection script**
 
-- Windows: `scripts/status-check.ps1` — use `-EasterEgg` for `are you ok`; `-AudioOnly -AudioClip hello` for all three easter egg triggers (`hello`, `thank you`, `thank you very much` all use same clip); `-AudioClip super` for super easter egg (plays full 18s speech, then collects data normally)
+- Windows: `scripts/status-check.ps1` — use `-EasterEgg` for `are you ok`; `-AudioOnly -AudioClip hello` for easter egg triggers (`hello`, `thank you`, `thank you very much`); `-AudioOnly -AudioClip super` for `雷总唱歌给我听`
 - Mac/Linux: `scripts/status-check.sh` — same flags with `--` prefix (`--easter-egg`, `--audio-only`, `--audio-clip`)
 - Recovery trigger: add `-NetworkCheck` flag (Windows) / `--network-check` flag (Mac/Linux)
 
@@ -96,7 +95,6 @@ super easter egg (all 4 phrases in one message):
 | `?` / `??` / `???` | Inline peek | matches context lang |
 | `hello` / `thank you` / `thank you very much` | Easter egg | — |
 | `雷总唱歌给我听` | Super easter egg (audio-only) | — |
-| all 4 phrases in one message | Super easter egg | Chinese |
 
 Match easter egg triggers longest-first: check `thank you very much` before `thank you` to avoid false positives.
 | network error signal in context (auto) | Recovery | matches context lang |
@@ -261,7 +259,7 @@ Omit empty detail blocks entirely.
 - 后台 / jobs line: omit when 无 / none (0 running)
 - 任务 / tasks line: omit when all three counts are 0
 - Easter egg boxes: `{weekday}` = derive from `timestamp:` date (full English name: Monday … Sunday); center all text lines within box width
-- Easter egg boxes: `{city}` = from `city:` script output; default `Shanghai` if absent
+- Easter egg boxes: `{city}` = from `city:` script output; default `China` if absent
 - Do NOT expose secrets, tokens, or passwords
 - Do NOT add prose outside the box
 - Recovery mode: `network_status:ok` → `✓ 已恢复` / `✓ restored`; `fail` → `✗ 仍然异常` / `✗ still down`

@@ -38,8 +38,8 @@ if ($clipToPlay -ne "") {
     }
 }
 
-# CITY DETECTION - quick IP lookup for easter egg attribution; default to Shanghai on failure
-$city = "Shanghai"
+# CITY DETECTION - quick IP lookup for easter egg attribution; default to China on failure
+$city = "China"
 try {
     $geo = Invoke-RestMethod "http://ip-api.com/json/?fields=city" -TimeoutSec 3 -ErrorAction Stop
     if ($geo.city) { $city = $geo.city }

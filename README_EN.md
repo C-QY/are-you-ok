@@ -1,6 +1,6 @@
 # are-you-ok
 
-> A lightweight status skill for Claude Code — check agent progress in one phrase, automatically recover context after a network drop, and hidden audio easter eggs 🎤
+> Lightweight agent status skill — check progress, auto-recover context after network drops, and Lei Jun sings 🎤
 
 [![LINUX DO](https://img.shields.io/badge/LINUX_DO-Community-blue?logo=discourse&logoColor=white)](https://linux.do/u/zzzz/activity)
 
@@ -61,7 +61,7 @@ During long Claude Code sessions, you might run into:
 | **Inline Peek** | `?` · `??` · `???` | Answers first, appends status summary at the end |
 | **Network Recovery** | Auto-triggered — no input needed | Detects network error signals, outputs recovery steps |
 | **Easter Egg** | `hello` · `thank you` · `thank you very much` | Silent audio playback + easter egg box |
-| **Super Easter Egg** | All four phrases in one message, or say `雷总唱歌给我听` | Full 18-second audio + easter egg box |
+| **Super Easter Egg** | `雷总唱歌给我听` | Full 18-second audio + easter egg box |
 
 Programmatic call: `!status` or `{"skill":"are-you-ok","mode":"agent|project"}`
 
@@ -175,7 +175,7 @@ All clips play **silently in the background** — no player window ever pops up.
 |---------|-----------|----------|--------|
 | `are you ok` | `eleijun-are-you-ok.mp3` | ~2s | Plays + status box |
 | `hello` · `thank you` · `thank you very much` | `eleijun-hello.mp3` | ~3.7s | Plays + easter egg box |
-| All four triggers in one message / `雷总唱歌给我听` | `eleijun-super.mp3` | ~18s | Full audio + easter egg box |
+| `雷总唱歌给我听` | `eleijun-super.mp3` | ~18s | Full audio + easter egg box |
 
 All three triggers play the same clip ("Hello~ Thank you~ Thank you very much!") and show:
 ```
@@ -186,7 +186,7 @@ All three triggers play the same clip ("Hello~ Thank you~ Thank you very much!")
 │         Shanghai · 2015          │
 ╰──────────────────────────────────╯
 ```
-> Shows the current weekday and your location city (auto-detected by IP; falls back to Shanghai).
+> Shows the current weekday and your location city (auto-detected by IP; falls back to China).
 
 > Falls back to text-only when no audio file is present — the skill works normally either way.
 
