@@ -183,7 +183,6 @@ Agent 程序化调用：`!status` 或 `{"skill":"are-you-ok","mode":"agent|proje
 │     🎤  "Hello~ Thank you~"      │
 │      "Thank you very much!"      │
 │              Friday              │
-│         Shanghai · 2015          │
 ╰──────────────────────────────────╯
 ```
 > 显示当天星期几。

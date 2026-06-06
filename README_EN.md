@@ -183,7 +183,6 @@ All three triggers play the same clip ("Hello~ Thank you~ Thank you very much!")
 │     🎤  "Hello~ Thank you~"      │
 │      "Thank you very much!"      │
 │              Friday              │
-│         Shanghai · 2015          │
 ╰──────────────────────────────────╯
 ```
 > Shows the current weekday.
