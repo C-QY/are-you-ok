@@ -1,6 +1,5 @@
 # are-you-ok【雷总唱歌版】
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![LINUX DO](https://img.shields.io/badge/LINUX_DO-社区讨论-blue?logo=discourse&logoColor=white)](https://linux.do/u/zzzz/activity)
 
 > 一句话查看 Claude Code Agent 状态 — 自动恢复断网上下文，还有雷总唱歌 🎤
@@ -14,7 +13,7 @@
 👌 说 `are you ok` — 立即获取模型、任务、git、记忆的完整快照  
 🔄 断网自动恢复 — 检测断网信号，自动输出恢复步骤，无需任何输入  
 ⚡ 快速一瞥 — 用 `?` 在当前对话末尾追加状态摘要，不打断节奏  
-🎵 彩蛋内置 — 说 `雷总唱歌给我听`，后台静默播放 18 秒完整音频  
+🎵 雷总唱歌 — 说 `雷总唱歌给我听`，就会给你唱 are you ok  
 
 ---
 

@@ -1,6 +1,5 @@
 # are-you-ok
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![LINUX DO](https://img.shields.io/badge/LINUX_DO-Community-blue?logo=discourse&logoColor=white)](https://linux.do/u/zzzz/activity)
 
 > Instant status snapshots for Claude Code — auto-recovers after network drops, and Lei Jun sings 🎤
@@ -14,7 +13,7 @@
 👌 Say `are you ok` — instant snapshot of model, tasks, git, and memory  
 🔄 Auto-recovers from network drops — detects error signals and guides you back, no input needed  
 ⚡ Inline peek — append a status summary to any response with `?`, without breaking your flow  
-🎵 Easter egg built in — say `雷总唱歌给我听` and Lei Jun plays silently in the background  
+🎵 Lei Jun sings — say `雷总唱歌给我听` and he'll sing Are You OK for you  
 
 ---
 
