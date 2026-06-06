@@ -8,7 +8,6 @@ description: >-
   Trigger — agent: "are you ok", "你还好吗", "状态怎么样", "汇报进度", "当前状态", !status.
   Trigger — inline peek: ?, ??, ??? — finish the current response first, then append the status box.
   Trigger — project: "项目进度", "项目状态", "项目情况", "project status", "project progress".
-  Trigger — audio-only: "雷总唱歌给我听".
   Trigger — recovery (AUTO, no user input needed): invoke automatically at the start of a
   conversation turn when the context contains ANY of these network error signals —
   Claude Code: "socket connection was closed unexpectedly", "Streamable HTTP error",
@@ -23,38 +22,65 @@ description: >-
   Do NOT auto-invoke if user voluntarily ended the conversation with no error signals.
   Do NOT auto-invoke for business errors (token limit, content policy, etc.).
   Output language: Chinese for CN triggers and "are you ok"; English otherwise.
+  Trigger — easter egg: "hello", "thank you", "thank you very much", "雷总唱歌给我听" — play audio only, no status box.
+  Trigger — super easter egg: message contains ALL FOUR phrases ("are you ok" + "hello" + "thank you" + "thank you very much") — play full speech then show status box.
 allowed_tools: [PowerShell, Bash, Read, Glob]
 resources:
   - scripts/status-check.ps1
   - scripts/status-check.sh
   - assets/eleijun-are-you-ok.mp3
+  - assets/eleijun-hello.mp3
+  - assets/eleijun-super.mp3
 ---
 
 ## Workflow
 
 **Step 1 — Run the data collection script**
 
-- Windows: `scripts/status-check.ps1` — add `-OkAudio` flag if trigger is `are you ok` or `雷总唱歌给我听`
-- Mac/Linux: `scripts/status-check.sh` — add `--ok-audio` flag if trigger is `are you ok` or `雷总唱歌给我听`
+- Windows: `scripts/status-check.ps1` — use `-EasterEgg` for `are you ok`; `-AudioOnly -AudioClip hello` for all three easter egg triggers (`hello`, `thank you`, `thank you very much` all use same clip); `-AudioClip super` for super easter egg (plays full 18s speech, then collects data normally)
+- Mac/Linux: `scripts/status-check.sh` — same flags with `--` prefix (`--easter-egg`, `--audio-only`, `--audio-clip`)
 - Recovery trigger: add `-NetworkCheck` flag (Windows) / `--network-check` flag (Mac/Linux)
 
 Do NOT read the script into context — execute it. Captures: **timestamp**, cwd, project_name,
 project_type, git branch/tag/log×3/changes, claude_brief, memory count.
 With `-NetworkCheck`: also outputs `network_status:ok` or `network_status:fail`.
-With the ok audio flag, audio plays automatically in the background.
+With the easter egg flag, audio plays automatically in the background.
 
 Use the `timestamp:` value from script output for the status box — **no separate time call needed**.
 
-If the script returns `ok_audio:not_found` (no audio file found), render this before the status box:
+For audio-only triggers: script outputs `audio_clip:<name>` — always render the matching box, then stop (no status snapshot).
+For `are you ok`: render box only when `easter_egg:missing` is returned (audio file absent), then continue to status.
+For super easter egg: render the super box when `easter_egg:playing` OR `easter_egg:missing` is returned, then continue to status.
 
+"are you ok":
 ```
 ╭──────────────────────────────────╮
-│  🎤  "Are you OK?"               │
-│      Lei Jun · Shanghai · 2015   │
+│        🎤  "Are you OK?"         │
+│            {weekday}             │
+│         {city} · 2015            │
 ╰──────────────────────────────────╯
 ```
 
-If the script returns `ok_audio:playing` (background process started), proceed directly to the status box — no extra output needed. This signal means the process launched successfully, not that audio completed; playback failures are silent and outside the skill's scope.
+"hello" / "thank you" / "thank you very much":
+```
+╭──────────────────────────────────╮
+│     🎤  "Hello~ Thank you~"      │
+│      "Thank you very much!"      │
+│            {weekday}             │
+│         {city} · 2015            │
+╰──────────────────────────────────╯
+```
+
+super easter egg (all 4 phrases in one message):
+```
+╭────────────────────────────────────────────╮
+│             🎤🎤  Are you OK?              │
+│             Hello~, Thank you~             │
+│            Thank you very much!            │
+│                  {weekday}                 │
+│              {city} · 2015                 │
+╰────────────────────────────────────────────╯
+```
 
 **Step 2 — Determine mode and language**
 
@@ -67,12 +93,11 @@ If the script returns `ok_audio:playing` (background process started), proceed d
 | `!status` / JSON call | Agent | English |
 | `{"skill":"are-you-ok","mode":"project"}` | Project | English |
 | `?` / `??` / `???` | Inline peek | matches context lang |
-| network error signal in context (auto) | Recovery | matches context lang |
-| `雷总唱歌给我听` | Audio-only | — |
+| `hello` / `thank you` / `thank you very much` / `雷总唱歌给我听` | Easter egg | — |
+| all 4 phrases in one message | Super easter egg | Chinese |
 
-**Audio-only mode** (`雷总唱歌给我听`): Run `scripts/status-check.ps1 -OkAudio` (Windows) /
-`scripts/status-check.sh --ok-audio` (Mac/Linux). If `ok_audio:playing` → no output.
-If `ok_audio:not_found` → render the text easter egg box. Skip Step 3 and Step 4 entirely — no status box.
+Match easter egg triggers longest-first: check `thank you very much` before `thank you` to avoid false positives.
+| network error signal in context (auto) | Recovery | matches context lang |
 
 **Inline peek behavior** (`?` / `??` / `???`): Complete the current response or task first, then append the status box at the end — do not interrupt ongoing work.
 
@@ -233,6 +258,8 @@ Omit empty detail blocks entirely.
 - memory not found (no `memory_count` in script output): omit 记忆 / memory line entirely
 - 后台 / jobs line: omit when 无 / none (0 running)
 - 任务 / tasks line: omit when all three counts are 0
+- Easter egg boxes: `{weekday}` = derive from `timestamp:` date (full English name: Monday … Sunday); center all text lines within box width
+- Easter egg boxes: `{city}` = from `city:` script output; default `Shanghai` if absent
 - Do NOT expose secrets, tokens, or passwords
 - Do NOT add prose outside the box
 - Recovery mode: `network_status:ok` → `✓ 已恢复` / `✓ restored`; `fail` → `✗ 仍然异常` / `✗ still down`

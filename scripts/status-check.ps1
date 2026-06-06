@@ -1,6 +1,6 @@
-# status-check.ps1 - Layer 3 data collector for the are-you-ok skill (Windows)
-# Usage: status-check.ps1 [-OkAudio] [-NetworkCheck]
-param([switch]$OkAudio, [switch]$NetworkCheck)
+﻿# status-check.ps1 - Layer 3 data collector for the are-you-ok skill (Windows)
+# Usage: status-check.ps1 [-EasterEgg] [-AudioOnly -AudioClip <name>]
+param([switch]$EasterEgg, [switch]$NetworkCheck, [switch]$AudioOnly, [string]$AudioClip = "")
 
 # NETWORK CHECK - quick DNS probe, runs before data collection
 if ($NetworkCheck) {
@@ -12,26 +12,45 @@ if ($NetworkCheck) {
     }
 }
 
-# OK AUDIO - play audio first so it starts while data is collected
-if ($OkAudio) {
-    $noAudio = Join-Path $PSScriptRoot "..\.no-audio"
-    if (-not (Test-Path $noAudio)) {
-        $mp3 = Join-Path $PSScriptRoot "..\assets\eleijun-are-you-ok.mp3"
-        $wav = Join-Path $PSScriptRoot "..\assets\eleijun-are-you-ok.wav"
-        if (Test-Path $mp3) {
-            $fullPath = (Resolve-Path $mp3).Path
-            Start-Process powershell -WindowStyle Hidden -ArgumentList '-NoProfile', '-Command',
-                "Add-Type -AssemblyName PresentationCore; `$p = New-Object System.Windows.Media.MediaPlayer; `$p.Open([uri]::new('$fullPath')); `$p.Play(); Start-Sleep 15"
-            Write-Output "ok_audio:playing"
-        } elseif (Test-Path $wav) {
-            $fullPath = (Resolve-Path $wav).Path
-            Start-Process powershell -WindowStyle Hidden -ArgumentList '-NoProfile', '-Command',
-                "Add-Type -AssemblyName System.Windows.Forms; (New-Object System.Media.SoundPlayer '$fullPath').PlaySync()"
-            Write-Output "ok_audio:playing"
-        } else {
-            Write-Output "ok_audio:not_found"
-        }
+# AUDIO - play clip first so it starts while data is collected
+$clipToPlay = ""
+if ($EasterEgg) { $clipToPlay = "are-you-ok" }
+if ($AudioClip -ne "") { $clipToPlay = $AudioClip }
+
+if ($clipToPlay -ne "") {
+    $noAudio = Join-Path $PSScriptRoot "..\assets\.no-audio"
+    $mp3 = Join-Path $PSScriptRoot "..\assets\eleijun-$clipToPlay.mp3"
+    $wav = Join-Path $PSScriptRoot "..\assets\eleijun-$clipToPlay.wav"
+    if (Test-Path $noAudio) {
+        # audio disabled by user
+    } elseif (Test-Path $mp3) {
+        $fullPath = (Resolve-Path $mp3).Path
+        Start-Process powershell -WindowStyle Hidden -ArgumentList '-NoProfile', '-Command',
+            "Add-Type -AssemblyName PresentationCore; `$p = New-Object System.Windows.Media.MediaPlayer; `$p.Open([uri]::new('$fullPath')); `$p.Play(); Start-Sleep 20"
+        Write-Output 'easter_egg:playing'
+    } elseif (Test-Path $wav) {
+        $fullPath = (Resolve-Path $wav).Path
+        Start-Process powershell -WindowStyle Hidden -ArgumentList '-NoProfile', '-Command',
+            "Add-Type -AssemblyName System.Windows.Forms; (New-Object System.Media.SoundPlayer '$fullPath').PlaySync()"
+        Write-Output 'easter_egg:playing'
+    } else {
+        Write-Output 'easter_egg:missing'
     }
+}
+
+# CITY DETECTION - quick IP lookup for easter egg attribution; default to Shanghai on failure
+$city = "Shanghai"
+try {
+    $geo = Invoke-RestMethod "http://ip-api.com/json/?fields=city" -TimeoutSec 3 -ErrorAction Stop
+    if ($geo.city) { $city = $geo.city }
+} catch {}
+Write-Output "city:$city"
+
+# AUDIO ONLY - pure easter egg triggers: return timestamp + clip name, skip data collection
+if ($AudioOnly) {
+    Write-Output "timestamp:$(Get-Date -Format 'yyyy-MM-dd HH:mm')"
+    Write-Output "audio_clip:$clipToPlay"
+    exit 0
 }
 
 $cwd = (Get-Location).Path

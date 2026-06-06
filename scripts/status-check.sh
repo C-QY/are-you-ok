@@ -1,36 +1,70 @@
 #!/usr/bin/env bash
 # status-check.sh - Layer 3 data collector for the are-you-ok skill (Mac/Linux)
-# Usage: status-check.sh [--ok-audio] [--network-check]
+# Usage: status-check.sh [--easter-egg] [--audio-only --audio-clip <name>] [--network-check]
 
 # NETWORK CHECK - quick DNS probe, runs before data collection
-if [ "$1" = "--network-check" ] || [ "$2" = "--network-check" ]; then
-  if nslookup api.anthropic.com >/dev/null 2>&1; then
-    echo "network_status:ok"
+for arg in "$@"; do
+  if [ "$arg" = "--network-check" ]; then
+    if nslookup api.anthropic.com > /dev/null 2>&1; then
+      echo "network_status:ok"
+    else
+      echo "network_status:fail"
+    fi
+    break
+  fi
+done
+
+# AUDIO - determine clip and play
+clip_to_play=""
+audio_only=false
+i=1
+while [ $i -le $# ]; do
+  arg="${!i}"
+  if [ "$arg" = "--easter-egg" ]; then clip_to_play="are-you-ok"
+  elif [ "$arg" = "--audio-only" ]; then audio_only=true
+  elif [ "$arg" = "--audio-clip" ]; then i=$((i+1)); clip_to_play="${!i}"
+  fi
+  i=$((i+1))
+done
+
+if [ -n "$clip_to_play" ]; then
+  assets="$(dirname "$0")/../assets"
+  mp3="$assets/eleijun-$clip_to_play.mp3"
+  wav="$assets/eleijun-$clip_to_play.wav"
+  played=false
+  if [ -f "$assets/.no-audio" ]; then
+    : # audio disabled by user
+  elif [ -f "$mp3" ]; then
+    if command -v afplay &>/dev/null;   then afplay "$mp3" & played=true
+    elif command -v mpg123 &>/dev/null; then mpg123 -q "$mp3" & played=true
+    elif command -v ffplay &>/dev/null; then ffplay -nodisp -autoexit -loglevel quiet "$mp3" & played=true
+    fi
+  elif [ -f "$wav" ]; then
+    if command -v afplay &>/dev/null;   then afplay "$wav" & played=true
+    elif command -v aplay &>/dev/null;  then aplay -q "$wav" & played=true
+    fi
+  fi
+  if [ "$played" = true ]; then
+    echo "easter_egg:playing"
   else
-    echo "network_status:fail"
+    echo "easter_egg:missing"
   fi
 fi
 
-# OK AUDIO - play audio first so it starts while data is collected
-if [ "$1" = "--ok-audio" ] || [ "$2" = "--ok-audio" ]; then
-  _no_audio="$(dirname "$0")/../.no-audio"
-  if [ -f "$_no_audio" ]; then
-    : # silently skip
-  else
-    mp3="$(dirname "$0")/../assets/eleijun-are-you-ok.mp3"
-    _played=false
-    if [ -f "$mp3" ]; then
-      if command -v afplay >/dev/null 2>&1;   then afplay "$mp3" & _played=true
-      elif command -v mpg123 >/dev/null 2>&1; then mpg123 -q "$mp3" & _played=true
-      elif command -v ffplay >/dev/null 2>&1; then ffplay -nodisp -autoexit -loglevel quiet "$mp3" & _played=true
-      fi
-    fi
-    if [ "$_played" = true ]; then
-      echo "ok_audio:playing"
-    else
-      echo "ok_audio:not_found"
-    fi
-  fi
+# CITY DETECTION - IP lookup for easter egg attribution; default Shanghai on failure
+city="Shanghai"
+if command -v curl &>/dev/null; then
+  city_resp=$(curl -s --max-time 3 "http://ip-api.com/json/?fields=city" 2>/dev/null)
+  city_val=$(echo "$city_resp" | grep -o '"city":"[^"]*"' | sed 's/"city":"//;s/"//')
+  [ -n "$city_val" ] && city="$city_val"
+fi
+echo "city:$city"
+
+# AUDIO ONLY - pure easter egg triggers: return timestamp + clip name, skip data collection
+if [ "$audio_only" = true ]; then
+  echo "timestamp:$(date '+%Y-%m-%d %H:%M')"
+  echo "audio_clip:$clip_to_play"
+  exit 0
 fi
 
 echo "timestamp:$(date '+%Y-%m-%d %H:%M')"
@@ -57,7 +91,7 @@ echo "project_name:$project_name"
 echo "project_type:$project_type"
 
 # GIT
-if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+if git rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
   branch=$(git rev-parse --abbrev-ref HEAD)
   count=$(git status --short 2>/dev/null | wc -l | tr -d ' ')
   tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "none")
