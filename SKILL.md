@@ -8,6 +8,7 @@ description: >-
   Trigger — agent: "are you ok", "你还好吗", "状态怎么样", "汇报进度", "当前状态", !status.
   Trigger — inline peek: ?, ??, ??? — finish the current response first, then append the status box.
   Trigger — project: "项目进度", "项目状态", "项目情况", "project status", "project progress".
+  Trigger — audio-only: "雷总唱歌给我听".
   Trigger — recovery (AUTO, no user input needed): invoke automatically at the start of a
   conversation turn when the context contains ANY of these network error signals —
   Claude Code: "socket connection was closed unexpectedly", "Streamable HTTP error",
@@ -33,8 +34,8 @@ resources:
 
 **Step 1 — Run the data collection script**
 
-- Windows: `scripts/status-check.ps1` — add `-OkAudio` flag if trigger is `are you ok`
-- Mac/Linux: `scripts/status-check.sh` — add `--ok-audio` flag if trigger is `are you ok`
+- Windows: `scripts/status-check.ps1` — add `-OkAudio` flag if trigger is `are you ok` or `雷总唱歌给我听`
+- Mac/Linux: `scripts/status-check.sh` — add `--ok-audio` flag if trigger is `are you ok` or `雷总唱歌给我听`
 - Recovery trigger: add `-NetworkCheck` flag (Windows) / `--network-check` flag (Mac/Linux)
 
 Do NOT read the script into context — execute it. Captures: **timestamp**, cwd, project_name,
@@ -67,6 +68,11 @@ If the script returns `ok_audio:playing` (background process started), proceed d
 | `{"skill":"are-you-ok","mode":"project"}` | Project | English |
 | `?` / `??` / `???` | Inline peek | matches context lang |
 | network error signal in context (auto) | Recovery | matches context lang |
+| `雷总唱歌给我听` | Audio-only | — |
+
+**Audio-only mode** (`雷总唱歌给我听`): Run `scripts/status-check.ps1 -OkAudio` (Windows) /
+`scripts/status-check.sh --ok-audio` (Mac/Linux). If `ok_audio:playing` → no output.
+If `ok_audio:not_found` → render the text easter egg box. Skip Step 3 and Step 4 entirely — no status box.
 
 **Inline peek behavior** (`?` / `??` / `???`): Complete the current response or task first, then append the status box at the end — do not interrupt ongoing work.
 
