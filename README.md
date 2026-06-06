@@ -1,4 +1,4 @@
-# are-you-ok
+# are-you-ok 雷总唱歌版
 
 > 轻量状态查看 Skill —— 检查 Agent 进度，网络中断后自动恢复 context，还有雷总唱歌 🎤
 
