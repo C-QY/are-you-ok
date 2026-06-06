@@ -60,7 +60,7 @@ chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh
 | **项目进度** | `项目进度` · `项目状态` · `项目情况` · `汇报项目` | 查看项目名、版本、提交、变更文件 |
 | **快速一瞥** | `?` · `??` · `???` | 先回答问题，末尾追加状态摘要 |
 | **网络恢复** | 自动触发（无需输入） | 检测断网信号，输出恢复步骤 |
-| **语音彩蛋** | `hello` · `thank you` · `thank you very much` | 静默播放音频 + 文字彩蛋 |
+| **语音彩蛋** | `hello` / `thank you` / `thank you very much`（任意一个） | 静默播放音频 + 文字彩蛋 |
 | **超级彩蛋** | `雷总唱歌给我听` | 播放完整18秒音频 + 文字彩蛋 |
 
 Agent 程序化调用：`!status` 或 `{"skill":"are-you-ok","mode":"agent|project"}`
@@ -174,7 +174,7 @@ Agent 程序化调用：`!status` 或 `{"skill":"are-you-ok","mode":"agent|proje
 | 触发词 | 音频文件 | 时长 | 效果 |
 |------|---------|------|------|
 | `are you ok` | `eleijun-are-you-ok.mp3` | ~2s | 播放 + 显示状态框 |
-| `hello` · `thank you` · `thank you very much` | `eleijun-hello.mp3` | ~3.7s | 播放 + 文字彩蛋 |
+| `hello` / `thank you` / `thank you very much`（任意一个触发） | `eleijun-hello.mp3` | ~3.7s | 播放 + 文字彩蛋 |
 | `雷总唱歌给我听` | `eleijun-super.mp3` | ~18s | 完整音频 + 文字彩蛋 |
 
 三个触发词播放同一段音频（Hello~ Thank you~ Thank you very much!），触发时显示：

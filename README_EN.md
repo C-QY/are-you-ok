@@ -60,7 +60,7 @@ During long Claude Code sessions, you might run into:
 | **Project Status** | `project status` · `project progress` · `show project` | Name, version, commits, changed files |
 | **Inline Peek** | `?` · `??` · `???` | Answers first, appends status summary at the end |
 | **Network Recovery** | Auto-triggered — no input needed | Detects network error signals, outputs recovery steps |
-| **Easter Egg** | `hello` · `thank you` · `thank you very much` | Silent audio playback + easter egg box |
+| **Easter Egg** | `hello` / `thank you` / `thank you very much` (any one triggers) | Silent audio playback + easter egg box |
 | **Super Easter Egg** | `雷总唱歌给我听` | Full 18-second audio + easter egg box |
 
 Programmatic call: `!status` or `{"skill":"are-you-ok","mode":"agent|project"}`
@@ -174,7 +174,7 @@ All clips play **silently in the background** — no player window ever pops up.
 | Trigger | Audio file | Duration | Effect |
 |---------|-----------|----------|--------|
 | `are you ok` | `eleijun-are-you-ok.mp3` | ~2s | Plays + status box |
-| `hello` · `thank you` · `thank you very much` | `eleijun-hello.mp3` | ~3.7s | Plays + easter egg box |
+| `hello` / `thank you` / `thank you very much` (any one triggers) | `eleijun-hello.mp3` | ~3.7s | Plays + easter egg box |
 | `雷总唱歌给我听` | `eleijun-super.mp3` | ~18s | Full audio + easter egg box |
 
 All three triggers play the same clip ("Hello~ Thank you~ Thank you very much!") and show:
