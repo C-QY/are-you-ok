@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="420" viewBox="0 0 700 420">
+  <defs>
+    <style>
+      .bg { fill: #1e1e2e; }
+      .win-bar { fill: #313244; }
+      .dot-red { fill: #f38ba8; }
+      .dot-yellow { fill: #f9e2af; }
+      .dot-green { fill: #a6e3a1; }
+      .prompt { fill: #a6e3a1; font-family: monospace; font-size: 13px; }
+      .cmd { fill: #cdd6f4; font-family: monospace; font-size: 13px; }
+      .dim { fill: #6c7086; font-family: monospace; font-size: 13px; }
+      .header { fill: #a6e3a1; font-family: monospace; font-size: 13px; font-weight: bold; }
+      .field { fill: #cdd6f4; font-family: monospace; font-size: 13px; }
+      .active { fill: #f9e2af; font-family: monospace; font-size: 13px; }
+      .pending { fill: #89dceb; font-family: monospace; font-size: 13px; }
+      .done { fill: #a6e3a1; font-family: monospace; font-size: 13px; }
+      .egg { fill: #cba6f7; font-family: monospace; font-size: 13px; }
+      .cursor { fill: #cdd6f4; }
+
+      /* Timing: cmd1=0.5s, box1=1.5-3.5s, pause, cmd2=5s, box2=6-7s */
+      .t-cmd1 { animation: fadein 0.3s 0.5s both; }
+      .t-box1 { animation: fadein 0.2s 1.5s both; }
+      .t-box1b { animation: fadein 0.2s 1.7s both; }
+      .t-box1c { animation: fadein 0.2s 1.9s both; }
+      .t-box1d { animation: fadein 0.2s 2.1s both; }
+      .t-box1e { animation: fadein 0.2s 2.3s both; }
+      .t-box1f { animation: fadein 0.2s 2.5s both; }
+      .t-box1g { animation: fadein 0.2s 2.7s both; }
+      .t-box1h { animation: fadein 0.2s 2.9s both; }
+      .t-cmd2 { animation: fadein 0.3s 5.0s both; }
+      .t-egg1 { animation: fadein 0.3s 5.8s both; }
+      .t-egg2 { animation: fadein 0.3s 6.0s both; }
+      .t-egg3 { animation: fadein 0.3s 6.2s both; }
+      .t-egg4 { animation: fadein 0.3s 6.4s both; }
+      .t-egg5 { animation: fadein 0.3s 6.6s both; }
+      .t-egg6 { animation: fadein 0.3s 6.8s both; }
+
+      .t-cur1 { animation: blink 0.8s 0.5s 5 both, fadein 0s 1.5s both reverse; }
+      .t-cur2 { animation: fadein 0s 5.0s both, blink 0.8s 5.0s 4 both, fadein 0s 5.8s both reverse; }
+
+      @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes blink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
+    </style>
+  </defs>
+
+  <!-- Terminal window -->
+  <rect width="700" height="420" rx="10" class="bg"/>
+  <rect width="700" height="32" rx="10" class="win-bar"/>
+  <rect y="16" width="700" height="16" class="win-bar"/>
+  <circle cx="20" cy="16" r="6" class="dot-red"/>
+  <circle cx="40" cy="16" r="6" class="dot-yellow"/>
+  <circle cx="60" cy="16" r="6" class="dot-green"/>
+  <text x="350" y="21" text-anchor="middle" font-family="monospace" font-size="12" fill="#6c7086">are-you-ok demo</text>
+
+  <!-- Line 1: prompt + command 1 -->
+  <text x="20" y="62" class="prompt">❯</text>
+  <text x="36" y="62" class="cmd t-cmd1">are you ok</text>
+  <rect x="123" y="51" width="8" height="14" class="cursor t-cur1"/>
+
+  <!-- Status box -->
+  <text x="20" y="82" class="header t-box1">👌  STATUS ─── 2026-06-06 14:32</text>
+  <text x="20" y="97"  class="dim t-box1b">│</text>
+  <text x="20" y="112" class="dim t-box1b">│  <tspan class="field">agent   claude-sonnet-4-6</tspan></text>
+  <text x="20" y="127" class="dim t-box1c">│  <tspan class="field">cwd     ~/projects/my-app</tspan></text>
+  <text x="20" y="142" class="dim t-box1d">│  <tspan class="field">git     main · 2Δ · "feat: add user search"</tspan></text>
+  <text x="20" y="157" class="dim t-box1e">│  <tspan class="field">memory  4 entries</tspan></text>
+  <text x="20" y="172" class="dim t-box1e">│  <tspan class="active">●2 active</tspan><tspan class="field">  </tspan><tspan class="pending">○1 pending</tspan><tspan class="field">  </tspan><tspan class="done">✓3 done</tspan></text>
+  <text x="20" y="187" class="dim t-box1f">│  <tspan class="field">tools   Read Write Edit Glob Grep</tspan></text>
+  <text x="20" y="202" class="dim t-box1f">│</text>
+  <text x="20" y="217" class="dim t-box1g">├─ ACTIVE ───────────────────────────────────────</text>
+  <text x="20" y="232" class="dim t-box1g">│  <tspan class="active">●</tspan><tspan class="field">  implement pagination for results list</tspan></text>
+  <text x="20" y="247" class="dim t-box1h">│  <tspan class="active">●</tspan><tspan class="field">  write unit tests for auth module</tspan></text>
+  <text x="20" y="262" class="dim t-box1h">├─ MEMORY ───────────────────────────────────────</text>
+  <text x="20" y="277" class="dim t-box1h">│  <tspan class="field">project-alpha   backend migration goals</tspan></text>
+  <text x="20" y="292" class="dim t-box1h">╰────────────────────────────────────────────────</text>
+
+  <!-- Line 2: prompt + command 2 -->
+  <text x="20" y="315" class="prompt t-cmd2">❯</text>
+  <text x="36" y="315" class="cmd t-cmd2">雷总唱歌给我听</text>
+  <rect x="145" y="304" width="8" height="14" class="cursor t-cur2"/>
+
+  <!-- Easter egg box -->
+  <text x="20" y="335" class="egg t-egg1">╭──────────────────────────────────╮</text>
+  <text x="20" y="350" class="egg t-egg2">│     🎤  "Hello~ Thank you~"      │</text>
+  <text x="20" y="365" class="egg t-egg3">│      "Thank you very much!"      │</text>
+  <text x="20" y="380" class="egg t-egg4">│              Friday              │</text>
+  <text x="20" y="395" class="egg t-egg5">│           2026-06-06             │</text>
+  <text x="20" y="410" class="egg t-egg6">╰──────────────────────────────────╯</text>
+</svg>

@@ -19,6 +19,8 @@
 
 ## Preview
 
+![are-you-ok demo](assets/demo.svg)
+
 **Agent mode** (`are you ok`):
 ```
 👌  STATUS ─── 2026-06-06 14:32

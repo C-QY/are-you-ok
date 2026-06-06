@@ -44,6 +44,8 @@ chmod +x ~/.claude/skills/are-you-ok/scripts/status-check.sh  # Mac/Linux
 
 ## 效果预览
 
+![are-you-ok demo](assets/demo.svg)
+
 **Agent 模式**（`are you ok`）：
 ```
 👌  状态检查 ─── 2026-06-06 14:32
