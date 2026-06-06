@@ -1,4 +1,4 @@
-# are-you-ok Lei Jun Sings Edition
+# are-you-ok【Lei Jun Sings Edition】
 
 > Lightweight agent status skill — check progress, auto-recover context after network drops, and Lei Jun sings 🎤
 
