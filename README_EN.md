@@ -1,4 +1,4 @@
-# are-you-ok · Lei Jun Sings Edition
+# are-you-ok &nbsp;![Lei Jun Sings Edition](https://img.shields.io/badge/-Lei_Jun_Sings_Edition-ff6600?style=flat-square)
 
 > Lightweight agent status skill — check progress, auto-recover context after network drops, and Lei Jun sings 🎤
 

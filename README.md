@@ -1,4 +1,4 @@
-# are-you-ok 雷总唱歌版
+# are-you-ok &nbsp;![雷总唱歌版](https://img.shields.io/badge/-%E9%9B%B7%E6%80%BB%E5%94%B1%E6%AD%8C%E7%89%88-ff6600?style=flat-square)
 
 > 轻量状态查看 Skill —— 检查 Agent 进度，网络中断后自动恢复 context，还有雷总唱歌 🎤
 
