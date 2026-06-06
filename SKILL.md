@@ -48,9 +48,8 @@ With the easter egg flag, audio plays automatically in the background.
 
 Use the `timestamp:` value from script output for the status box — **no separate time call needed**.
 
-For audio-only triggers: script outputs `audio_clip:<name>` — always render the matching box, then stop (no status snapshot).
-For `are you ok`: render box only when `easter_egg:missing` is returned (audio file absent), then continue to status.
-For super easter egg: render the super box when `easter_egg:playing` OR `easter_egg:missing` is returned, then continue to status.
+For audio-only triggers (hello/thank you/雷总唱歌给我听): script outputs `audio_clip:<name>` — always render the matching box, then stop (no status snapshot).
+For `are you ok`: render the "are you ok" box only when `easter_egg:missing` is returned (no audio file), then continue to status box.
 
 "are you ok":
 ```
@@ -71,7 +70,7 @@ For super easter egg: render the super box when `easter_egg:playing` OR `easter_
 ╰──────────────────────────────────╯
 ```
 
-super easter egg (all 4 phrases in one message):
+super easter egg (`雷总唱歌给我听`):
 ```
 ╭────────────────────────────────────────────╮
 │             🎤🎤  Are you OK?              │
