@@ -51,15 +51,6 @@ if [ -n "$clip_to_play" ]; then
   fi
 fi
 
-# CITY DETECTION - IP lookup for easter egg attribution; default Shanghai on failure
-city="China"
-if command -v curl &>/dev/null; then
-  city_resp=$(curl -s --max-time 3 "http://ip-api.com/json/?fields=city" 2>/dev/null)
-  city_val=$(echo "$city_resp" | grep -o '"city":"[^"]*"' | sed 's/"city":"//;s/"//')
-  [ -n "$city_val" ] && city="$city_val"
-fi
-echo "city:$city"
-
 # AUDIO ONLY - pure easter egg triggers: return timestamp + clip name, skip data collection
 if [ "$audio_only" = true ]; then
   echo "timestamp:$(date '+%Y-%m-%d %H:%M')"

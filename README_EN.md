@@ -1,4 +1,4 @@
-# are-you-ok【Lei Jun Sings Edition】
+# are-you-ok
 
 > Lightweight agent status skill — check progress, auto-recover context after network drops, and Lei Jun sings 🎤
 
@@ -186,7 +186,7 @@ All three triggers play the same clip ("Hello~ Thank you~ Thank you very much!")
 │         Shanghai · 2015          │
 ╰──────────────────────────────────╯
 ```
-> Shows the current weekday and your location city (auto-detected by IP; falls back to China).
+> Shows the current weekday.
 
 > Falls back to text-only when no audio file is present — the skill works normally either way.
 

@@ -38,14 +38,6 @@ if ($clipToPlay -ne "") {
     }
 }
 
-# CITY DETECTION - quick IP lookup for easter egg attribution; default to China on failure
-$city = "China"
-try {
-    $geo = Invoke-RestMethod "http://ip-api.com/json/?fields=city" -TimeoutSec 3 -ErrorAction Stop
-    if ($geo.city) { $city = $geo.city }
-} catch {}
-Write-Output "city:$city"
-
 # AUDIO ONLY - pure easter egg triggers: return timestamp + clip name, skip data collection
 if ($AudioOnly) {
     Write-Output "timestamp:$(Get-Date -Format 'yyyy-MM-dd HH:mm')"

@@ -57,7 +57,7 @@ For super easter egg: render the super box when `easter_egg:playing` OR `easter_
 ╭──────────────────────────────────╮
 │        🎤  "Are you OK?"         │
 │            {weekday}             │
-│         {city} · 2015            │
+│         Shanghai · 2015            │
 ╰──────────────────────────────────╯
 ```
 
@@ -67,7 +67,7 @@ For super easter egg: render the super box when `easter_egg:playing` OR `easter_
 │     🎤  "Hello~ Thank you~"      │
 │      "Thank you very much!"      │
 │            {weekday}             │
-│         {city} · 2015            │
+│         Shanghai · 2015            │
 ╰──────────────────────────────────╯
 ```
 
@@ -78,7 +78,7 @@ super easter egg (all 4 phrases in one message):
 │             Hello~, Thank you~             │
 │            Thank you very much!            │
 │                  {weekday}                 │
-│              {city} · 2015                 │
+│              Shanghai · 2015                 │
 ╰────────────────────────────────────────────╯
 ```
 
@@ -259,7 +259,6 @@ Omit empty detail blocks entirely.
 - 后台 / jobs line: omit when 无 / none (0 running)
 - 任务 / tasks line: omit when all three counts are 0
 - Easter egg boxes: `{weekday}` = derive from `timestamp:` date (full English name: Monday … Sunday); center all text lines within box width
-- Easter egg boxes: `{city}` = from `city:` script output; default `China` if absent
 - Do NOT expose secrets, tokens, or passwords
 - Do NOT add prose outside the box
 - Recovery mode: `network_status:ok` → `✓ 已恢复` / `✓ restored`; `fail` → `✗ 仍然异常` / `✗ still down`
