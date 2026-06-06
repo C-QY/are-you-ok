@@ -22,8 +22,9 @@ description: >-
   Do NOT auto-invoke if user voluntarily ended the conversation with no error signals.
   Do NOT auto-invoke for business errors (token limit, content policy, etc.).
   Output language: Chinese for CN triggers and "are you ok"; English otherwise.
-  Trigger — easter egg: "hello", "thank you", "thank you very much", "雷总唱歌给我听" — play audio only, no status box.
+  Trigger — easter egg: "hello", "thank you", "thank you very much" — play audio only, no status box.
   Trigger — super easter egg: message contains ALL FOUR phrases ("are you ok" + "hello" + "thank you" + "thank you very much") — play full speech then show status box.
+  Trigger — 雷总唱歌给我听: play full 18s super clip only, no status box. Use -AudioOnly -AudioClip super (Windows) / --audio-only --audio-clip super (Mac/Linux).
 allowed_tools: [PowerShell, Bash, Read, Glob]
 resources:
   - scripts/status-check.ps1
@@ -93,7 +94,8 @@ super easter egg (all 4 phrases in one message):
 | `!status` / JSON call | Agent | English |
 | `{"skill":"are-you-ok","mode":"project"}` | Project | English |
 | `?` / `??` / `???` | Inline peek | matches context lang |
-| `hello` / `thank you` / `thank you very much` / `雷总唱歌给我听` | Easter egg | — |
+| `hello` / `thank you` / `thank you very much` | Easter egg | — |
+| `雷总唱歌给我听` | Super easter egg (audio-only) | — |
 | all 4 phrases in one message | Super easter egg | Chinese |
 
 Match easter egg triggers longest-first: check `thank you very much` before `thank you` to avoid false positives.
