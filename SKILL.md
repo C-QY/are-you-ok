@@ -8,19 +8,11 @@ description: >-
   Trigger — agent: "are you ok", "你还好吗", "状态怎么样", "汇报进度", "当前状态", !status.
   Trigger — inline peek: ?, ??, ??? — finish the current response first, then append the status box.
   Trigger — project: "项目进度", "项目状态", "项目情况", "project status", "project progress".
-  Trigger — recovery (AUTO, no user input needed): invoke automatically at the start of a
-  conversation turn when the context contains ANY of these network error signals —
-  Claude Code: "socket connection was closed unexpectedly", "Streamable HTTP error",
-  "claude.ai proxy connection failed";
-  OpenAI/GPT: "network error", "Failed to fetch", "The network connection was lost",
-  "Error communicating with ChatGPT";
-  Copilot: "Copilot is not reachable", "Connection to GitHub Copilot failed";
-  Cursor: "Could not connect to language model";
-  Gemini: "UNAVAILABLE", "deadline exceeded", "transport error";
-  Universal: "ECONNRESET", "ECONNREFUSED", "ETIMEDOUT", "ENOTFOUND", "ERR_NETWORK",
-  "502", "503", "request timeout", "connection was closed", "connection interrupted".
-  Do NOT auto-invoke if user voluntarily ended the conversation with no error signals.
-  Do NOT auto-invoke for business errors (token limit, content policy, etc.).
+  Trigger — recovery (AUTO): at the start of a turn, if the context shows a network/connection error
+  (e.g. "socket connection was closed unexpectedly", "Streamable HTTP error", ECONNRESET, ETIMEDOUT,
+  ENOTFOUND, 502, 503, "request timeout", "connection interrupted") or similar transport failures from
+  Claude Code, OpenAI, Copilot, Cursor, or Gemini. Do NOT auto-invoke when the user voluntarily ended
+  the chat with no error signals, or for business errors (token limit, content policy, etc.).
   Output language: Chinese for CN triggers and "are you ok"; English otherwise.
   Trigger — easter egg: "hello", "thank you", "thank you very much" — play audio only, no status box.
   Trigger — 雷总唱歌给我听: play full 18s super clip only, no status box. Use -AudioOnly -AudioClip super (Windows) / --audio-only --audio-clip super (Mac/Linux).
